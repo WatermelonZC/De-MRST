@@ -28,7 +28,7 @@ def main():
         parser.error(f"--checkpoint is required for {args.method}")
     if args.samples and args.method not in LEARNED:
         parser.error("--samples applies only to learned decentralized methods")
-    instances = sorted(args.instances.glob("*.json"))
+    instances = sorted(args.instances.glob("[0-9][0-9].json"))
     if args.limit is not None:
         if args.limit < 1:
             parser.error("--limit must be positive")

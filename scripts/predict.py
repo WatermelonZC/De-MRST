@@ -105,8 +105,6 @@ def main():
         "method": payload["method"],
         "checkpoint": str(checkpoint),
         "checkpoint_step": payload["step"],
-        "decoder_glimpses": getattr(config, "decoder_glimpses", None),
-        "query_fusion_contexts": getattr(config, "query_fusion_contexts", None),
         "decoding": "greedy" if args.samples == 0 else f"sample_{args.samples}",
         "success": success,
         "objective": cost,

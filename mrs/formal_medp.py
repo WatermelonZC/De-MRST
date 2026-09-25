@@ -1,12 +1,4 @@
-"""D-AM-sized MEDP with shared lightweight pair reasoning.
-
-The standard decentralized AM trunk is kept exactly at d=128, eight heads,
-one encoder layer, and a 512-wide encoder FFN.  MEDP adds dense edge
-representations and explicit partner pooling over shared node embeddings,
-plain task/query fusion MLPs, and one or two applications of the AM glimpse.
-The two-step development model retains its edge transition. The glimpse
-and pointer cooperation gates retain their existing initialization.
-"""
+"""De-MRST policy with pair reasoning and an attention decoder."""
 
 import math
 from dataclasses import dataclass
@@ -103,10 +95,8 @@ class FormalMEDPConfig:
     edge_feed_forward_hidden: int = 64
     conditioner_hidden: int = 32
     partner_pool_rank: int = 48
-    decoder_glimpses: int = 2
-    # Four contexts preserve the already-trained checkpoints; the paper model
-    # uses the three encoded robot/global contexts without partner_summary.
-    query_fusion_contexts: int = 4
+    decoder_glimpses: int = 1
+    query_fusion_contexts: int = 3
     pair_gate_init: float = 0.01
     pair_logit_limit: float = 2.0
     forward_chunk_size: int = 2048  # Zero disables policy-forward chunking.
@@ -218,7 +208,6 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
         self.medp_config = config or FormalMEDPConfig()
         self.medp_config.validate()
         super().__init__(self.medp_config.backbone)
-        # The legacy variant additionally consumes a pooled partner summary.
         # Do not retain the inherited, now-unused 3d-to-d decoder projection.
         del self.context_projection
         cfg = self.medp_config

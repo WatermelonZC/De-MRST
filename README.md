@@ -22,19 +22,18 @@ Run greedy decoding on one paper instance:
 
 ```bash
 python scripts/predict.py \
-  --instance benchmarks/instances/n20/00_s2169443384.json
+  --instance benchmarks/instances/n20/01.json
 ```
 
 The script selects `checkpoints/n20/best.pt` from the task count. It prints the
 objective, the task–CR–WR plan, and execution metrics as JSON. Use
 `--checkpoint PATH` for another compatible De-MRST, D-AM, or HetMRTA checkpoint.
-The model architecture is reconstructed from that checkpoint's metadata.
 
 For Sample-1280 decoding:
 
 ```bash
 python scripts/predict.py \
-  --instance benchmarks/instances/n20/00_s2169443384.json \
+  --instance benchmarks/instances/n20/01.json \
   --samples 1280 --device cuda --output prediction.json
 ```
 
@@ -43,10 +42,8 @@ python scripts/predict.py \
 
 ## Train
 
-The paper's described architecture has one decoder glimpse and a three-part
-query containing the current robot, mean-pooled graph context, and global
-token. The frozen `paper_n10`, `paper_n20`, `paper_n50`, and `paper_n100`
-protocols select that architecture and the paper's training budget. For N=20:
+The frozen `paper_n10`, `paper_n20`, `paper_n50`, and `paper_n100` protocols
+select the paper's training settings. For N=20:
 
 ```bash
 python scripts/train.py \
@@ -62,13 +59,8 @@ The best validation checkpoint is written to `runs/n20/best.pt`. Replace
 accepts `d_am` and `hetmrta_mrs` for the decentralized learning baselines.
 The centralized AM trainer is `scripts/train_c_am_formal.py`.
 
-The supplied checkpoints in `checkpoints/` are the completed experimental
-weights used for the current paper result tables. They have **two** glimpses
-and a **four-part** query, including a partner summary. They are not weights
-trained under the one-glimpse, three-part architecture described above.
-Prediction loads their exact trained architecture; new one-glimpse training
-produces separate checkpoints. `checkpoints/manifest.json` records each file's
-SHA-256, training protocol, seed, and selected epoch.
+`checkpoints/manifest.json` records each supplied checkpoint's SHA-256,
+training protocol, seed, and selected epoch.
 
 ## Baselines
 
@@ -77,7 +69,7 @@ attention model (AM), and HetMRTA with De-MRST. Run a non-learning baseline:
 
 ```bash
 python scripts/baselines.py \
-  --instance benchmarks/instances/n20/00_s2169443384.json \
+  --instance benchmarks/instances/n20/01.json \
   --method d_min_min
 ```
 
@@ -86,6 +78,14 @@ Available methods are `d_min_min`, `d_murdoch`, `d_coalition_auction`,
 by default; change it with `--time-limit`. AM requires `--checkpoint PATH`.
 Use `scripts/predict.py --checkpoint PATH` for trained D-AM and HetMRTA
 policies.
+
+For the Gurobi baseline:
+
+```bash
+python scripts/baselines.py \
+  --instance benchmarks/instances/n20/01.json \
+  --method gurobi --time-limit 30
+```
 
 To run one method over a paper instance directory and save each plan:
 
@@ -101,8 +101,9 @@ The runner writes `actions/*.json` and `summary.json`.
 ## Instances and results
 
 - `benchmarks/instances/n10`, `n20`, `n50`, and `n100` contain the 20 JSON
-  instances per task count used for the reported comparisons. The runner
-  creates temporary XLSX input for the centralized baselines.
+  instances per task count used for the reported comparisons. Files are
+  numbered `01.json` through `20.json`. The runner creates temporary XLSX
+  input for the centralized baselines.
 - `results/results.xlsx` contains the paper's reported records.
 
 The 20 comparison instances were selected from the training protocol's fixed
@@ -110,12 +111,14 @@ validation seed stream. They are a shared comparison cohort, not an independent
 held-out test set.
 
 Run `python scripts/verify_release.py` to check protocol hashes, checkpoint
-hashes, architecture metadata, and strict checkpoint loading.
+hashes, and strict checkpoint loading.
 
 ## Attribution
 
 HetMRTA is a Marsupial-specific adaptation of
 [marmotlab/HeteroMRTA](https://github.com/marmotlab/HeteroMRTA) (Apache 2.0).
-The attention model follows Kool et al. The remaining methods are the
-adaptations described in the paper. The repository code is released under
-the [MIT license](LICENSE).
+The centralized attention model adapts code from
+[wouterkool/attention-learn-to-route](https://github.com/wouterkool/attention-learn-to-route)
+under its [MIT license](ATTENTION_LICENSE.txt). The remaining methods are the
+adaptations described in the paper. The repository code is released under the
+[MIT license](LICENSE).

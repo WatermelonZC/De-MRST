@@ -321,7 +321,7 @@ def generate_instance(
         int(seed), n_mbr, n_dor
     )
     return MarsupialInstance(
-        instance_id=instance_id or f"{distribution}_n{task_count}_m{n_mbr}_o{n_dor}_s{seed}",
+        instance_id=instance_id or f"n{task_count}-{seed}",
         distribution=distribution,
         data_seed=int(seed),
         tasks=tasks,

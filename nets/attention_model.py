@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 from nets.graph_encoder import GraphAttentionEncoder
 from torch.nn import DataParallel
-from utils.functions import sample_many_hc
+from utils.functions import sample_many_centralized
 
 
 
@@ -64,7 +64,7 @@ class AttentionModel(nn.Module):
         self.n_encode_layers = n_encode_layers
         self.decode_type = None
         self.temp = 1.0
-        self.is_hca = True
+        self.is_centralized_mrs = True
         # HC补充
         self.sub_vehicle_size = sub_vehicle_size
         self.mom_vehicle_size = mom_vehicle_size
@@ -188,7 +188,7 @@ class AttentionModel(nn.Module):
         return likelihoods.mean(1)
 
     def _init_embed(self, input):
-        if self.is_hca:
+        if self.is_centralized_mrs:
             if self.designated_driver:
                 x = self.init_embed(self._request_features(input))
                 return torch.cat(
@@ -231,12 +231,12 @@ class AttentionModel(nn.Module):
                     state = state[unfinished]
                     fixed = fixed[unfinished]
             current_node = state.get_current_node()
-            task_log_p, mask = self._get_log_p_hc(fixed, state, current_node=current_node, normalize=True, select_state="task",
+            task_log_p, mask = self._get_log_p_centralized(fixed, state, current_node=current_node, normalize=True, select_state="task",
                                                   select_embedding=None)
             task_selected = self._select_node(task_log_p.exp()[:, 0, :], mask[:, 0, :])  # Squeeze out steps dimension
             selected_embedding = embeddings[ids, task_selected]  # (batch_size, embedding_size)
             # sub_vehicle select
-            sub_log_p, mask = self._get_log_p_hc(fixed=fixed, state=state, current_node=current_node, select_state="sub_vehicle",
+            sub_log_p, mask = self._get_log_p_centralized(fixed=fixed, state=state, current_node=current_node, select_state="sub_vehicle",
                                                  select_embedding=selected_embedding.unsqueeze(1), embeddings=embeddings)
             sub_selected = self._select_node(sub_log_p.exp()[:, 0, :], mask[:, 0, :])  # Squeeze out steps dimension
             sub_selected_task = state.vehicle_pos[ids, sub_selected, 0]  # (batch,)
@@ -245,7 +245,7 @@ class AttentionModel(nn.Module):
             selected_embedding = self.vehicle_state_att(
                 torch.cat((sub_selected_time_state, sub_selected_node_embedding), dim=-1)
             )
-            mom_log_p, mask = self._get_log_p_hc(fixed=fixed, state=state, current_node=current_node, select_state="mom_vehicle",
+            mom_log_p, mask = self._get_log_p_centralized(fixed=fixed, state=state, current_node=current_node, select_state="mom_vehicle",
                                                  select_embedding=selected_embedding,
                                                  embeddings=embeddings)
             mom_selected = self._select_node(mom_log_p.exp()[:, 0, :], mask[:, 0, :])  # Squeeze out steps dimension
@@ -269,9 +269,8 @@ class AttentionModel(nn.Module):
                 torch.stack(sequences, 1), state)
 
     def sample_many(self, input, batch_rep=1, iter_rep=1):
-        return sample_many_hc(
+        return sample_many_centralized(
             lambda input: self._inner(*input),
-            lambda input, pi: self.problem.get_costs(input[0], pi),
             (input, self.embedder(self._init_embed(input))),
             batch_rep, iter_rep, self,
         )
@@ -314,7 +313,7 @@ class AttentionModel(nn.Module):
         )
         return AttentionModelFixed(embeddings, fixed_context, *fixed_attention_node_data)
 
-    def _get_log_p_hc(self, fixed, state, current_node, normalize=True, select_state="task", select_embedding=None, embeddings=None):
+    def _get_log_p_centralized(self, fixed, state, current_node, normalize=True, select_state="task", select_embedding=None, embeddings=None):
         if select_state == "task":
             # step_context = checkpoint(self._get_parallel_step_context, fixed.node_embeddings, current_node, use_reentrant=False)
 

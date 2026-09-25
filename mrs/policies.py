@@ -15,7 +15,7 @@ STUDY_METHODS = ("hetmrta_mrs", "medp_1r", "d_am")
 
 
 def build_model(method, device, medp_ablation="full", medp_forward_chunk_size=None,
-                *, medp_decoder_glimpses=2, medp_query_fusion_contexts=4,
+                *, medp_decoder_glimpses=1, medp_query_fusion_contexts=3,
                 n_mbr=4, n_dor=8):
     if method not in FORMAL_MEDP_METHODS and medp_ablation != "full":
         raise ValueError("MEDP ablations only apply to formal MEDP methods")

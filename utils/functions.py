@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 
 from mrs.core import objective_tensor
-from problems.hc.problem_hca import HCA
+from problems.centralized_mrs.problem import CentralizedMRSProblem
 
 
 def _repeat_batch(value, repeats, device, batch_size):
@@ -24,11 +24,11 @@ def _repeat_batch(value, repeats, device, batch_size):
     )
 
 
-def sample_many_hc(inner_func, get_cost_func, input, batch_rep=1, iter_rep=1,
+def sample_many_centralized(inner_func, input, batch_rep=1, iter_rep=1,
                    attention_model=None):
     """Return the best sampled C-AM plan and its objective."""
-    if attention_model is None or not attention_model.is_hca:
-        raise ValueError("the C-AM sampling helper requires an HCA model")
+    if attention_model is None or not attention_model.is_centralized_mrs:
+        raise ValueError("the C-AM sampling helper requires a centralized MRS model")
     started = time.time()
     embeddings, _, global_embedding = input[1]
     nodes = torch.cat((embeddings, global_embedding), dim=1)
@@ -48,7 +48,7 @@ def sample_many_hc(inner_func, get_cost_func, input, batch_rep=1, iter_rep=1,
     costs = []
     plans = []
     for _ in range(iter_rep):
-        state = HCA.make_state(batch_input[0])
+        state = CentralizedMRSProblem.make_state(batch_input[0])
         _, plan, state = inner_func(batch_input + (state,))
         distance, delay = state.get_costs(batch_input[0], plan)[0]
         cost = objective_tensor(
@@ -58,7 +58,7 @@ def sample_many_hc(inner_func, get_cost_func, input, batch_rep=1, iter_rep=1,
             batch_input[0]["sub_size"][0].item()
             + batch_input[0]["mom_size"][0].item()
         )
-        sequence = HCA.process_sequences_torch(plan, vehicle_size)
+        sequence = CentralizedMRSProblem.process_sequences_torch(plan, vehicle_size)
         costs.append(cost.view(batch_rep, -1).t())
         plans.append(
             sequence.view(batch_rep, -1, sequence.size(1), sequence.size(-1))

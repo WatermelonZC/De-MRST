@@ -9,7 +9,7 @@ import torch
 
 from nets.attention_model import AttentionModel
 from nets.graph_encoder import GraphAttentionEncoder
-from problems.hc.problem_hca import HCA
+from problems.centralized_mrs.problem import CentralizedMRSProblem
 from .repro import environment_metadata, utc_now
 
 
@@ -30,7 +30,7 @@ def build_c_am(config: CAmConfig) -> AttentionModel:
     model = AttentionModel(
         config.embedding_dim,
         config.hidden_dim,
-        HCA,
+        CentralizedMRSProblem,
         n_encode_layers=config.n_encode_layers,
         n_heads=config.n_heads,
         normalization=config.normalization,

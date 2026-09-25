@@ -54,143 +54,123 @@
       "instances": [
         {
           "index": 0,
-          "instance_id": "uniform_n10_m4_o8_s2169443384",
+          "instance_id": "n10-01",
           "seed": 2169443384,
-          "json": "n10/00_s2169443384.json",
-          "xlsx": "n10/00_s2169443384.xlsx"
+          "json": "n10/01.json"
         },
         {
           "index": 1,
-          "instance_id": "uniform_n10_m4_o8_s2186642159",
+          "instance_id": "n10-02",
           "seed": 2186642159,
-          "json": "n10/01_s2186642159.json",
-          "xlsx": "n10/01_s2186642159.xlsx"
+          "json": "n10/02.json"
         },
         {
           "index": 2,
-          "instance_id": "uniform_n10_m4_o8_s2163491744",
+          "instance_id": "n10-03",
           "seed": 2163491744,
-          "json": "n10/02_s2163491744.json",
-          "xlsx": "n10/02_s2163491744.xlsx"
+          "json": "n10/03.json"
         },
         {
           "index": 3,
-          "instance_id": "uniform_n10_m4_o8_s2185252171",
+          "instance_id": "n10-04",
           "seed": 2185252171,
-          "json": "n10/03_s2185252171.json",
-          "xlsx": "n10/03_s2185252171.xlsx"
+          "json": "n10/04.json"
         },
         {
           "index": 4,
-          "instance_id": "uniform_n10_m4_o8_s2115400373",
+          "instance_id": "n10-05",
           "seed": 2115400373,
-          "json": "n10/04_s2115400373.json",
-          "xlsx": "n10/04_s2115400373.xlsx"
+          "json": "n10/05.json"
         },
         {
           "index": 5,
-          "instance_id": "uniform_n10_m4_o8_s2138108337",
+          "instance_id": "n10-06",
           "seed": 2138108337,
-          "json": "n10/05_s2138108337.json",
-          "xlsx": "n10/05_s2138108337.xlsx"
+          "json": "n10/06.json"
         },
         {
           "index": 6,
-          "instance_id": "uniform_n10_m4_o8_s2143304713",
+          "instance_id": "n10-07",
           "seed": 2143304713,
-          "json": "n10/06_s2143304713.json",
-          "xlsx": "n10/06_s2143304713.xlsx"
+          "json": "n10/07.json"
         },
         {
           "index": 7,
-          "instance_id": "uniform_n10_m4_o8_s2137613748",
+          "instance_id": "n10-08",
           "seed": 2137613748,
-          "json": "n10/07_s2137613748.json",
-          "xlsx": "n10/07_s2137613748.xlsx"
+          "json": "n10/08.json"
         },
         {
           "index": 8,
-          "instance_id": "uniform_n10_m4_o8_s2109822351",
+          "instance_id": "n10-09",
           "seed": 2109822351,
-          "json": "n10/08_s2109822351.json",
-          "xlsx": "n10/08_s2109822351.xlsx"
+          "json": "n10/09.json"
         },
         {
           "index": 9,
-          "instance_id": "uniform_n10_m4_o8_s2117685365",
+          "instance_id": "n10-10",
           "seed": 2117685365,
-          "json": "n10/09_s2117685365.json",
-          "xlsx": "n10/09_s2117685365.xlsx"
+          "json": "n10/10.json"
         },
         {
           "index": 10,
-          "instance_id": "uniform_n10_m4_o8_s2159294555",
+          "instance_id": "n10-11",
           "seed": 2159294555,
-          "json": "n10/10_s2159294555.json",
-          "xlsx": "n10/10_s2159294555.xlsx"
+          "json": "n10/11.json"
         },
         {
           "index": 11,
-          "instance_id": "uniform_n10_m4_o8_s2105438946",
+          "instance_id": "n10-12",
           "seed": 2105438946,
-          "json": "n10/11_s2105438946.json",
-          "xlsx": "n10/11_s2105438946.xlsx"
+          "json": "n10/12.json"
         },
         {
           "index": 12,
-          "instance_id": "uniform_n10_m4_o8_s2119020881",
+          "instance_id": "n10-13",
           "seed": 2119020881,
-          "json": "n10/12_s2119020881.json",
-          "xlsx": "n10/12_s2119020881.xlsx"
+          "json": "n10/13.json"
         },
         {
           "index": 13,
-          "instance_id": "uniform_n10_m4_o8_s2165390930",
+          "instance_id": "n10-14",
           "seed": 2165390930,
-          "json": "n10/13_s2165390930.json",
-          "xlsx": "n10/13_s2165390930.xlsx"
+          "json": "n10/14.json"
         },
         {
           "index": 14,
-          "instance_id": "uniform_n10_m4_o8_s2175757503",
+          "instance_id": "n10-15",
           "seed": 2175757503,
-          "json": "n10/14_s2175757503.json",
-          "xlsx": "n10/14_s2175757503.xlsx"
+          "json": "n10/15.json"
         },
         {
           "index": 15,
-          "instance_id": "uniform_n10_m4_o8_s2106904088",
+          "instance_id": "n10-16",
           "seed": 2106904088,
-          "json": "n10/15_s2106904088.json",
-          "xlsx": "n10/15_s2106904088.xlsx"
+          "json": "n10/16.json"
         },
         {
           "index": 16,
-          "instance_id": "uniform_n10_m4_o8_s2177178096",
+          "instance_id": "n10-17",
           "seed": 2177178096,
-          "json": "n10/16_s2177178096.json",
-          "xlsx": "n10/16_s2177178096.xlsx"
+          "json": "n10/17.json"
         },
         {
           "index": 17,
-          "instance_id": "uniform_n10_m4_o8_s2162467170",
+          "instance_id": "n10-18",
           "seed": 2162467170,
-          "json": "n10/17_s2162467170.json",
-          "xlsx": "n10/17_s2162467170.xlsx"
+          "json": "n10/18.json"
         },
         {
           "index": 18,
-          "instance_id": "uniform_n10_m4_o8_s2179595188",
+          "instance_id": "n10-19",
           "seed": 2179595188,
-          "json": "n10/18_s2179595188.json",
-          "xlsx": "n10/18_s2179595188.xlsx"
+          "json": "n10/19.json"
         },
         {
           "index": 19,
-          "instance_id": "uniform_n10_m4_o8_s2146699212",
+          "instance_id": "n10-20",
           "seed": 2146699212,
-          "json": "n10/19_s2146699212.json",
-          "xlsx": "n10/19_s2146699212.xlsx"
+          "json": "n10/20.json"
         }
       ]
     },
@@ -216,143 +196,123 @@
       "instances": [
         {
           "index": 0,
-          "instance_id": "uniform_n20_m4_o8_s2169443384",
+          "instance_id": "n20-01",
           "seed": 2169443384,
-          "json": "n20/00_s2169443384.json",
-          "xlsx": "n20/00_s2169443384.xlsx"
+          "json": "n20/01.json"
         },
         {
           "index": 1,
-          "instance_id": "uniform_n20_m4_o8_s2186642159",
+          "instance_id": "n20-02",
           "seed": 2186642159,
-          "json": "n20/01_s2186642159.json",
-          "xlsx": "n20/01_s2186642159.xlsx"
+          "json": "n20/02.json"
         },
         {
           "index": 2,
-          "instance_id": "uniform_n20_m4_o8_s2163491744",
+          "instance_id": "n20-03",
           "seed": 2163491744,
-          "json": "n20/02_s2163491744.json",
-          "xlsx": "n20/02_s2163491744.xlsx"
+          "json": "n20/03.json"
         },
         {
           "index": 3,
-          "instance_id": "uniform_n20_m4_o8_s2185252171",
+          "instance_id": "n20-04",
           "seed": 2185252171,
-          "json": "n20/03_s2185252171.json",
-          "xlsx": "n20/03_s2185252171.xlsx"
+          "json": "n20/04.json"
         },
         {
           "index": 4,
-          "instance_id": "uniform_n20_m4_o8_s2115400373",
+          "instance_id": "n20-05",
           "seed": 2115400373,
-          "json": "n20/04_s2115400373.json",
-          "xlsx": "n20/04_s2115400373.xlsx"
+          "json": "n20/05.json"
         },
         {
           "index": 5,
-          "instance_id": "uniform_n20_m4_o8_s2138108337",
+          "instance_id": "n20-06",
           "seed": 2138108337,
-          "json": "n20/05_s2138108337.json",
-          "xlsx": "n20/05_s2138108337.xlsx"
+          "json": "n20/06.json"
         },
         {
           "index": 6,
-          "instance_id": "uniform_n20_m4_o8_s2143304713",
+          "instance_id": "n20-07",
           "seed": 2143304713,
-          "json": "n20/06_s2143304713.json",
-          "xlsx": "n20/06_s2143304713.xlsx"
+          "json": "n20/07.json"
         },
         {
           "index": 7,
-          "instance_id": "uniform_n20_m4_o8_s2137613748",
+          "instance_id": "n20-08",
           "seed": 2137613748,
-          "json": "n20/07_s2137613748.json",
-          "xlsx": "n20/07_s2137613748.xlsx"
+          "json": "n20/08.json"
         },
         {
           "index": 8,
-          "instance_id": "uniform_n20_m4_o8_s2109822351",
+          "instance_id": "n20-09",
           "seed": 2109822351,
-          "json": "n20/08_s2109822351.json",
-          "xlsx": "n20/08_s2109822351.xlsx"
+          "json": "n20/09.json"
         },
         {
           "index": 9,
-          "instance_id": "uniform_n20_m4_o8_s2117685365",
+          "instance_id": "n20-10",
           "seed": 2117685365,
-          "json": "n20/09_s2117685365.json",
-          "xlsx": "n20/09_s2117685365.xlsx"
+          "json": "n20/10.json"
         },
         {
           "index": 10,
-          "instance_id": "uniform_n20_m4_o8_s2159294555",
+          "instance_id": "n20-11",
           "seed": 2159294555,
-          "json": "n20/10_s2159294555.json",
-          "xlsx": "n20/10_s2159294555.xlsx"
+          "json": "n20/11.json"
         },
         {
           "index": 11,
-          "instance_id": "uniform_n20_m4_o8_s2105438946",
+          "instance_id": "n20-12",
           "seed": 2105438946,
-          "json": "n20/11_s2105438946.json",
-          "xlsx": "n20/11_s2105438946.xlsx"
+          "json": "n20/12.json"
         },
         {
           "index": 12,
-          "instance_id": "uniform_n20_m4_o8_s2119020881",
+          "instance_id": "n20-13",
           "seed": 2119020881,
-          "json": "n20/12_s2119020881.json",
-          "xlsx": "n20/12_s2119020881.xlsx"
+          "json": "n20/13.json"
         },
         {
           "index": 13,
-          "instance_id": "uniform_n20_m4_o8_s2165390930",
+          "instance_id": "n20-14",
           "seed": 2165390930,
-          "json": "n20/13_s2165390930.json",
-          "xlsx": "n20/13_s2165390930.xlsx"
+          "json": "n20/14.json"
         },
         {
           "index": 14,
-          "instance_id": "uniform_n20_m4_o8_s2175757503",
+          "instance_id": "n20-15",
           "seed": 2175757503,
-          "json": "n20/14_s2175757503.json",
-          "xlsx": "n20/14_s2175757503.xlsx"
+          "json": "n20/15.json"
         },
         {
           "index": 15,
-          "instance_id": "uniform_n20_m4_o8_s2106904088",
+          "instance_id": "n20-16",
           "seed": 2106904088,
-          "json": "n20/15_s2106904088.json",
-          "xlsx": "n20/15_s2106904088.xlsx"
+          "json": "n20/16.json"
         },
         {
           "index": 16,
-          "instance_id": "uniform_n20_m4_o8_s2177178096",
+          "instance_id": "n20-17",
           "seed": 2177178096,
-          "json": "n20/16_s2177178096.json",
-          "xlsx": "n20/16_s2177178096.xlsx"
+          "json": "n20/17.json"
         },
         {
           "index": 17,
-          "instance_id": "uniform_n20_m4_o8_s2162467170",
+          "instance_id": "n20-18",
           "seed": 2162467170,
-          "json": "n20/17_s2162467170.json",
-          "xlsx": "n20/17_s2162467170.xlsx"
+          "json": "n20/18.json"
         },
         {
           "index": 18,
-          "instance_id": "uniform_n20_m4_o8_s2179595188",
+          "instance_id": "n20-19",
           "seed": 2179595188,
-          "json": "n20/18_s2179595188.json",
-          "xlsx": "n20/18_s2179595188.xlsx"
+          "json": "n20/19.json"
         },
         {
           "index": 19,
-          "instance_id": "uniform_n20_m4_o8_s2146699212",
+          "instance_id": "n20-20",
           "seed": 2146699212,
-          "json": "n20/19_s2146699212.json",
-          "xlsx": "n20/19_s2146699212.xlsx"
+          "json": "n20/20.json"
         }
       ]
     },
@@ -378,143 +338,123 @@
       "instances": [
         {
           "index": 0,
-          "instance_id": "uniform_n50_m4_o8_s2169443384",
+          "instance_id": "n50-01",
           "seed": 2169443384,
-          "json": "n50/00_s2169443384.json",
-          "xlsx": "n50/00_s2169443384.xlsx"
+          "json": "n50/01.json"
         },
         {
           "index": 1,
-          "instance_id": "uniform_n50_m4_o8_s2186642159",
+          "instance_id": "n50-02",
           "seed": 2186642159,
-          "json": "n50/01_s2186642159.json",
-          "xlsx": "n50/01_s2186642159.xlsx"
+          "json": "n50/02.json"
         },
         {
           "index": 2,
-          "instance_id": "uniform_n50_m4_o8_s2163491744",
+          "instance_id": "n50-03",
           "seed": 2163491744,
-          "json": "n50/02_s2163491744.json",
-          "xlsx": "n50/02_s2163491744.xlsx"
+          "json": "n50/03.json"
         },
         {
           "index": 3,
-          "instance_id": "uniform_n50_m4_o8_s2185252171",
+          "instance_id": "n50-04",
           "seed": 2185252171,
-          "json": "n50/03_s2185252171.json",
-          "xlsx": "n50/03_s2185252171.xlsx"
+          "json": "n50/04.json"
         },
         {
           "index": 4,
-          "instance_id": "uniform_n50_m4_o8_s2115400373",
+          "instance_id": "n50-05",
           "seed": 2115400373,
-          "json": "n50/04_s2115400373.json",
-          "xlsx": "n50/04_s2115400373.xlsx"
+          "json": "n50/05.json"
         },
         {
           "index": 5,
-          "instance_id": "uniform_n50_m4_o8_s2138108337",
+          "instance_id": "n50-06",
           "seed": 2138108337,
-          "json": "n50/05_s2138108337.json",
-          "xlsx": "n50/05_s2138108337.xlsx"
+          "json": "n50/06.json"
         },
         {
           "index": 6,
-          "instance_id": "uniform_n50_m4_o8_s2143304713",
+          "instance_id": "n50-07",
           "seed": 2143304713,
-          "json": "n50/06_s2143304713.json",
-          "xlsx": "n50/06_s2143304713.xlsx"
+          "json": "n50/07.json"
         },
         {
           "index": 7,
-          "instance_id": "uniform_n50_m4_o8_s2137613748",
+          "instance_id": "n50-08",
           "seed": 2137613748,
-          "json": "n50/07_s2137613748.json",
-          "xlsx": "n50/07_s2137613748.xlsx"
+          "json": "n50/08.json"
         },
         {
           "index": 8,
-          "instance_id": "uniform_n50_m4_o8_s2109822351",
+          "instance_id": "n50-09",
           "seed": 2109822351,
-          "json": "n50/08_s2109822351.json",
-          "xlsx": "n50/08_s2109822351.xlsx"
+          "json": "n50/09.json"
         },
         {
           "index": 9,
-          "instance_id": "uniform_n50_m4_o8_s2117685365",
+          "instance_id": "n50-10",
           "seed": 2117685365,
-          "json": "n50/09_s2117685365.json",
-          "xlsx": "n50/09_s2117685365.xlsx"
+          "json": "n50/10.json"
         },
         {
           "index": 10,
-          "instance_id": "uniform_n50_m4_o8_s2159294555",
+          "instance_id": "n50-11",
           "seed": 2159294555,
-          "json": "n50/10_s2159294555.json",
-          "xlsx": "n50/10_s2159294555.xlsx"
+          "json": "n50/11.json"
         },
         {
           "index": 11,
-          "instance_id": "uniform_n50_m4_o8_s2105438946",
+          "instance_id": "n50-12",
           "seed": 2105438946,
-          "json": "n50/11_s2105438946.json",
-          "xlsx": "n50/11_s2105438946.xlsx"
+          "json": "n50/12.json"
         },
         {
           "index": 12,
-          "instance_id": "uniform_n50_m4_o8_s2119020881",
+          "instance_id": "n50-13",
           "seed": 2119020881,
-          "json": "n50/12_s2119020881.json",
-          "xlsx": "n50/12_s2119020881.xlsx"
+          "json": "n50/13.json"
         },
         {
           "index": 13,
-          "instance_id": "uniform_n50_m4_o8_s2165390930",
+          "instance_id": "n50-14",
           "seed": 2165390930,
-          "json": "n50/13_s2165390930.json",
-          "xlsx": "n50/13_s2165390930.xlsx"
+          "json": "n50/14.json"
         },
         {
           "index": 14,
-          "instance_id": "uniform_n50_m4_o8_s2175757503",
+          "instance_id": "n50-15",
           "seed": 2175757503,
-          "json": "n50/14_s2175757503.json",
-          "xlsx": "n50/14_s2175757503.xlsx"
+          "json": "n50/15.json"
         },
         {
           "index": 15,
-          "instance_id": "uniform_n50_m4_o8_s2106904088",
+          "instance_id": "n50-16",
           "seed": 2106904088,
-          "json": "n50/15_s2106904088.json",
-          "xlsx": "n50/15_s2106904088.xlsx"
+          "json": "n50/16.json"
         },
         {
           "index": 16,
-          "instance_id": "uniform_n50_m4_o8_s2177178096",
+          "instance_id": "n50-17",
           "seed": 2177178096,
-          "json": "n50/16_s2177178096.json",
-          "xlsx": "n50/16_s2177178096.xlsx"
+          "json": "n50/17.json"
         },
         {
           "index": 17,
-          "instance_id": "uniform_n50_m4_o8_s2162467170",
+          "instance_id": "n50-18",
           "seed": 2162467170,
-          "json": "n50/17_s2162467170.json",
-          "xlsx": "n50/17_s2162467170.xlsx"
+          "json": "n50/18.json"
         },
         {
           "index": 18,
-          "instance_id": "uniform_n50_m4_o8_s2179595188",
+          "instance_id": "n50-19",
           "seed": 2179595188,
-          "json": "n50/18_s2179595188.json",
-          "xlsx": "n50/18_s2179595188.xlsx"
+          "json": "n50/19.json"
         },
         {
           "index": 19,
-          "instance_id": "uniform_n50_m4_o8_s2146699212",
+          "instance_id": "n50-20",
           "seed": 2146699212,
-          "json": "n50/19_s2146699212.json",
-          "xlsx": "n50/19_s2146699212.xlsx"
+          "json": "n50/20.json"
         }
       ]
     },
@@ -540,143 +480,123 @@
       "instances": [
         {
           "index": 0,
-          "instance_id": "uniform_n100_m4_o8_s2169443384",
+          "instance_id": "n100-01",
           "seed": 2169443384,
-          "json": "n100/00_s2169443384.json",
-          "xlsx": "n100/00_s2169443384.xlsx"
+          "json": "n100/01.json"
         },
         {
           "index": 1,
-          "instance_id": "uniform_n100_m4_o8_s2186642159",
+          "instance_id": "n100-02",
           "seed": 2186642159,
-          "json": "n100/01_s2186642159.json",
-          "xlsx": "n100/01_s2186642159.xlsx"
+          "json": "n100/02.json"
         },
         {
           "index": 2,
-          "instance_id": "uniform_n100_m4_o8_s2163491744",
+          "instance_id": "n100-03",
           "seed": 2163491744,
-          "json": "n100/02_s2163491744.json",
-          "xlsx": "n100/02_s2163491744.xlsx"
+          "json": "n100/03.json"
         },
         {
           "index": 3,
-          "instance_id": "uniform_n100_m4_o8_s2185252171",
+          "instance_id": "n100-04",
           "seed": 2185252171,
-          "json": "n100/03_s2185252171.json",
-          "xlsx": "n100/03_s2185252171.xlsx"
+          "json": "n100/04.json"
         },
         {
           "index": 4,
-          "instance_id": "uniform_n100_m4_o8_s2115400373",
+          "instance_id": "n100-05",
           "seed": 2115400373,
-          "json": "n100/04_s2115400373.json",
-          "xlsx": "n100/04_s2115400373.xlsx"
+          "json": "n100/05.json"
         },
         {
           "index": 5,
-          "instance_id": "uniform_n100_m4_o8_s2138108337",
+          "instance_id": "n100-06",
           "seed": 2138108337,
-          "json": "n100/05_s2138108337.json",
-          "xlsx": "n100/05_s2138108337.xlsx"
+          "json": "n100/06.json"
         },
         {
           "index": 6,
-          "instance_id": "uniform_n100_m4_o8_s2143304713",
+          "instance_id": "n100-07",
           "seed": 2143304713,
-          "json": "n100/06_s2143304713.json",
-          "xlsx": "n100/06_s2143304713.xlsx"
+          "json": "n100/07.json"
         },
         {
           "index": 7,
-          "instance_id": "uniform_n100_m4_o8_s2137613748",
+          "instance_id": "n100-08",
           "seed": 2137613748,
-          "json": "n100/07_s2137613748.json",
-          "xlsx": "n100/07_s2137613748.xlsx"
+          "json": "n100/08.json"
         },
         {
           "index": 8,
-          "instance_id": "uniform_n100_m4_o8_s2109822351",
+          "instance_id": "n100-09",
           "seed": 2109822351,
-          "json": "n100/08_s2109822351.json",
-          "xlsx": "n100/08_s2109822351.xlsx"
+          "json": "n100/09.json"
         },
         {
           "index": 9,
-          "instance_id": "uniform_n100_m4_o8_s2117685365",
+          "instance_id": "n100-10",
           "seed": 2117685365,
-          "json": "n100/09_s2117685365.json",
-          "xlsx": "n100/09_s2117685365.xlsx"
+          "json": "n100/10.json"
         },
         {
           "index": 10,
-          "instance_id": "uniform_n100_m4_o8_s2159294555",
+          "instance_id": "n100-11",
           "seed": 2159294555,
-          "json": "n100/10_s2159294555.json",
-          "xlsx": "n100/10_s2159294555.xlsx"
+          "json": "n100/11.json"
         },
         {
           "index": 11,
-          "instance_id": "uniform_n100_m4_o8_s2105438946",
+          "instance_id": "n100-12",
           "seed": 2105438946,
-          "json": "n100/11_s2105438946.json",
-          "xlsx": "n100/11_s2105438946.xlsx"
+          "json": "n100/12.json"
         },
         {
           "index": 12,
-          "instance_id": "uniform_n100_m4_o8_s2119020881",
+          "instance_id": "n100-13",
           "seed": 2119020881,
-          "json": "n100/12_s2119020881.json",
-          "xlsx": "n100/12_s2119020881.xlsx"
+          "json": "n100/13.json"
         },
         {
           "index": 13,
-          "instance_id": "uniform_n100_m4_o8_s2165390930",
+          "instance_id": "n100-14",
           "seed": 2165390930,
-          "json": "n100/13_s2165390930.json",
-          "xlsx": "n100/13_s2165390930.xlsx"
+          "json": "n100/14.json"
         },
         {
           "index": 14,
-          "instance_id": "uniform_n100_m4_o8_s2175757503",
+          "instance_id": "n100-15",
           "seed": 2175757503,
-          "json": "n100/14_s2175757503.json",
-          "xlsx": "n100/14_s2175757503.xlsx"
+          "json": "n100/15.json"
         },
         {
           "index": 15,
-          "instance_id": "uniform_n100_m4_o8_s2106904088",
+          "instance_id": "n100-16",
           "seed": 2106904088,
-          "json": "n100/15_s2106904088.json",
-          "xlsx": "n100/15_s2106904088.xlsx"
+          "json": "n100/16.json"
         },
         {
           "index": 16,
-          "instance_id": "uniform_n100_m4_o8_s2177178096",
+          "instance_id": "n100-17",
           "seed": 2177178096,
-          "json": "n100/16_s2177178096.json",
-          "xlsx": "n100/16_s2177178096.xlsx"
+          "json": "n100/17.json"
         },
         {
           "index": 17,
-          "instance_id": "uniform_n100_m4_o8_s2162467170",
+          "instance_id": "n100-18",
           "seed": 2162467170,
-          "json": "n100/17_s2162467170.json",
-          "xlsx": "n100/17_s2162467170.xlsx"
+          "json": "n100/18.json"
         },
         {
           "index": 18,
-          "instance_id": "uniform_n100_m4_o8_s2179595188",
+          "instance_id": "n100-19",
           "seed": 2179595188,
-          "json": "n100/18_s2179595188.json",
-          "xlsx": "n100/18_s2179595188.xlsx"
+          "json": "n100/19.json"
         },
         {
           "index": 19,
-          "instance_id": "uniform_n100_m4_o8_s2146699212",
+          "instance_id": "n100-20",
           "seed": 2146699212,
-          "json": "n100/19_s2146699212.json",
-          "xlsx": "n100/19_s2146699212.xlsx"
+          "json": "n100/20.json"
         }
       ]
     }

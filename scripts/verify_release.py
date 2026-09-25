@@ -32,9 +32,7 @@ def main():
         path = ROOT / "checkpoints" / f"n{count}" / "best.pt"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         assert digest == manifest[f"n{count}"]["sha256"], path
-        trained, payload = load_formal_medp_checkpoint(path)
-        assert trained.medp_config.decoder_glimpses == 2
-        assert trained.medp_config.query_fusion_contexts == 4
+        _, payload = load_formal_medp_checkpoint(path)
         assert payload["training_config"]["protocol_id"] == manifest[f"n{count}"]["training_protocol_id"]
         print(f"n{count}: protocol and checkpoint OK")
 

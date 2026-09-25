@@ -485,8 +485,8 @@ def main():
     torch.manual_seed(args.model_seed)
     torch.cuda.manual_seed_all(args.model_seed)
     frozen_forward_chunk = None
-    frozen_decoder_glimpses = 2
-    frozen_query_fusion_contexts = 4
+    frozen_decoder_glimpses = 1
+    frozen_query_fusion_contexts = 3
     if args.method in FORMAL_MEDP_METHODS:
         frozen_forward_chunk = protocol.get("medp_policy_forward_chunk_size")
         if frozen_forward_chunk is None:
@@ -495,10 +495,10 @@ def main():
             )
         frozen_decoder_glimpses = frozen.protocol.get(
             "architecture_freeze", {}
-        ).get("medp_decoder_glimpses", 2)
+        ).get("medp_decoder_glimpses", 1)
         frozen_query_fusion_contexts = frozen.protocol.get(
             "architecture_freeze", {}
-        ).get("medp_query_fusion_contexts", 4)
+        ).get("medp_query_fusion_contexts", 3)
     model = build_model(
         args.method,
         device,
