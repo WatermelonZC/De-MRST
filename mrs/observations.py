@@ -1,8 +1,8 @@
-"""Shared raw observations for decentralized HetMRTA and MEDP policies.
+"""Shared raw observations for decentralized learned policies.
 
 This module deliberately excludes any MBR-DOR pairing lookahead. All policies
-receive the same communicated information and encoding: Hete, D-AM and formal
-MEDP use remaining roles, one-hot assignments, location/duration attributes and
+receive the same communicated information and encoding: HetMRTA, D-AM, and
+De-MRST use remaining roles, one-hot assignments, location/duration attributes and
 actual completion. Completion becomes true only after the WR finishes processing.
 The redundant feasible-assignment flag is absent from current policy inputs.
 The simulator's four-state execution lifecycle is unchanged. Owners are communicated assignment
@@ -123,12 +123,12 @@ def validate_protocol_observation_schema(protocol, method=None) -> None:
 
 def validate_protocol_ablation(protocol, method, ablation="full"):
     """Do not silently run a new intervention under an old full-model protocol."""
-    if method not in {"medp_formal", "medp_1r"} and ablation != "full":
-        raise ValueError("MEDP ablations only apply to formal MEDP methods")
+    if method != "de_mrst" and ablation != "full":
+        raise ValueError("De-MRST ablations only apply to De-MRST")
     architectures = protocol.get("ablation_architectures")
     if architectures is not None and method not in architectures:
         raise ValueError("method is not authorized by this ablation protocol")
-    if method not in {"medp_formal", "medp_1r"}:
+    if method != "de_mrst":
         return
     allowed = protocol.get("decentralized_training", {}).get("ablation_variants", ["full"])
     if ablation not in allowed:
@@ -140,7 +140,7 @@ def validate_protocol_ablation(protocol, method, ablation="full"):
 
 def validate_model_observation_protocol(protocol, method, model, *, runtime_overrides=()):
     """Reject architecture drift in the new one-hot study before training."""
-    config = getattr(model, "medp_config", model.config)
+    config = getattr(model, "de_mrst_config", model.config)
     ablation = getattr(config, "ablation", "full")
     variants = protocol.get("ablation_architectures", {}).get(method)
     if variants is not None:

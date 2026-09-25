@@ -10,7 +10,7 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from mrs.formal_medp_checkpoint import load_formal_medp_checkpoint
+from mrs.de_mrst_checkpoint import load_de_mrst_checkpoint
 from mrs.policies import build_model
 from mrs.protocol import load_frozen_protocol, validate_protocol_source_files
 
@@ -20,19 +20,19 @@ def main():
     for count in (10, 20, 50, 100):
         frozen = load_frozen_protocol(ROOT, f"paper_n{count}")
         validate_protocol_source_files(ROOT, frozen.protocol)
-        expected = frozen.protocol["method_architectures"]["medp_1r"]
+        expected = frozen.protocol["method_architectures"]["de_mrst"]
         model = build_model(
-            "medp_1r", "cpu", medp_decoder_glimpses=1,
-            medp_query_fusion_contexts=3,
-            medp_forward_chunk_size=frozen.protocol["decentralized_training"]["medp_policy_forward_chunk_size"],
+            "de_mrst", "cpu", de_mrst_decoder_glimpses=1,
+            de_mrst_query_fusion_contexts=3,
+            de_mrst_forward_chunk_size=frozen.protocol["decentralized_training"]["de_mrst_policy_forward_chunk_size"],
         )
-        assert model.medp_config.to_dict() == expected["policy_config"]
+        assert model.de_mrst_config.to_dict() == expected["policy_config"]
         assert sum(p.numel() for p in model.parameters() if p.requires_grad) == expected["parameter_count"]
 
         path = ROOT / "checkpoints" / f"n{count}" / "best.pt"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         assert digest == manifest[f"n{count}"]["sha256"], path
-        _, payload = load_formal_medp_checkpoint(path)
+        _, payload = load_de_mrst_checkpoint(path)
         assert payload["training_config"]["protocol_id"] == manifest[f"n{count}"]["training_protocol_id"]
         print(f"n{count}: protocol and checkpoint OK")
 

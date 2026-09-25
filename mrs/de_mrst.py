@@ -28,16 +28,16 @@ TASK_DESTINATION_X_FEATURE_INDEX = TASK_BASE_FEATURES.index("destination_dx") - 
 TASK_DESTINATION_Y_FEATURE_INDEX = TASK_BASE_FEATURES.index("destination_dy") - TASK_BASE_FEATURE_DIM
 
 
-MEDP_ARCHITECTURE = "dam_trunk_partner_pooling_relu_fusion_v11"
-MEDP_PAPER_ARCHITECTURE = "dam_trunk_partner_pooling_paper_query_v12"
-MEDP_EDGE_FEATURE_SCHEMA = "marsupial_edge_offsets_manhattan_owner_v1"
-MEDP_EDGE_FEATURES = (
+DE_MRST_ARCHITECTURE = "dam_trunk_partner_pooling_relu_fusion_v11"
+DE_MRST_PAPER_ARCHITECTURE = "dam_trunk_partner_pooling_paper_query_v12"
+DE_MRST_EDGE_FEATURE_SCHEMA = "marsupial_edge_offsets_manhattan_owner_v1"
+DE_MRST_EDGE_FEATURES = (
     "source_dx_from_robot", "source_dy_from_robot",
     "target_dx_from_robot", "target_dy_from_robot",
     "source_distance", "target_distance", "committed_partner",
 )
-MEDP_EDGE_FEATURE_DIM = len(MEDP_EDGE_FEATURES)
-MEDP_RETAINED_COMPONENTS = (
+DE_MRST_EDGE_FEATURE_DIM = len(DE_MRST_EDGE_FEATURES)
+DE_MRST_RETAINED_COMPONENTS = (
     "exact_d_am_d128_h8_l1_ff512_trunk",
     "dense_task_agent_edge_state",
     "shared_task_and_robot_embeddings",
@@ -50,7 +50,7 @@ MEDP_RETAINED_COMPONENTS = (
     "role_local_one_hot_owner_task_features",
     "legal_empty_task_partner_competition",
 )
-MEDP_LITE_REDUCTIONS = (
+DE_MRST_LITE_REDUCTIONS = (
     "edge_width_32",
     "glimpse_parameters_shared_across_two_applications",
     "fusion_mlp_hidden_width_32",
@@ -64,7 +64,7 @@ MECHANISM_ABLATIONS = (
     "no_exact_binding",
 )
 
-MEDP_ABLATIONS = (
+DE_MRST_ABLATIONS = (
     "full",
     *MECHANISM_ABLATIONS,
     "no_edge_context",
@@ -86,12 +86,12 @@ def _gate_parameter(initial_value: float) -> torch.Tensor:
 
 
 @dataclass(frozen=True)
-class FormalMEDPConfig:
+class DeMRSTConfig:
     """D-AM-compatible trunk plus shared lightweight pair modules."""
 
     backbone: DecentralizedAMConfig = _default_backbone()
     edge_dim: int = 32
-    recurrent_steps: int = 2
+    recurrent_steps: int = 1
     edge_feed_forward_hidden: int = 64
     conditioner_hidden: int = 32
     partner_pool_rank: int = 48
@@ -104,7 +104,7 @@ class FormalMEDPConfig:
 
     def validate(self) -> None:
         if not isinstance(self.backbone, DecentralizedAMConfig):
-            raise TypeError("formal MEDP requires the one-hot owner AM backbone config")
+            raise TypeError("De-MRST requires the one-hot owner AM backbone config")
         self.backbone.validate()
         if (
             self.backbone.embedding_dim != 128
@@ -112,7 +112,7 @@ class FormalMEDPConfig:
             or self.backbone.encoder_layers != 1
             or self.backbone.feed_forward_hidden != 512
         ):
-            raise ValueError("MEDP requires the exact D-AM d128/h8/l1/ff512 trunk")
+            raise ValueError("De-MRST requires the exact D-AM d128/h8/l1/ff512 trunk")
         if self.edge_dim <= 0:
             raise ValueError("edge_dim must be positive")
         if self.recurrent_steps not in {1, 2} or self.decoder_glimpses not in {1, 2}:
@@ -133,14 +133,14 @@ class FormalMEDPConfig:
             raise ValueError("pair_logit_limit must be positive")
         if type(self.forward_chunk_size) is not int or self.forward_chunk_size < 0:
             raise ValueError("forward_chunk_size must be a nonnegative integer; zero disables chunking")
-        if self.ablation not in MEDP_ABLATIONS:
+        if self.ablation not in DE_MRST_ABLATIONS:
             raise ValueError(
-                f"ablation must be one of {MEDP_ABLATIONS}, got {self.ablation!r}"
+                f"ablation must be one of {DE_MRST_ABLATIONS}, got {self.ablation!r}"
             )
 
     def to_dict(self) -> Dict[str, object]:
-        components = list(MEDP_RETAINED_COMPONENTS)
-        reductions = list(MEDP_LITE_REDUCTIONS)
+        components = list(DE_MRST_RETAINED_COMPONENTS)
+        reductions = list(DE_MRST_LITE_REDUCTIONS)
         if self.recurrent_steps == 1:
             components.remove("edge_ffn_transition")
             reductions.append("inactive_edge_transition_not_registered")
@@ -172,12 +172,12 @@ class FormalMEDPConfig:
             "forward_chunk_size": self.forward_chunk_size,
             "ablation": self.ablation,
             "architecture": (
-                MEDP_ARCHITECTURE if self.query_fusion_contexts == 4
-                else MEDP_PAPER_ARCHITECTURE
+                DE_MRST_ARCHITECTURE if self.query_fusion_contexts == 4
+                else DE_MRST_PAPER_ARCHITECTURE
             ),
-            "edge_feature_schema": MEDP_EDGE_FEATURE_SCHEMA,
-            "edge_feature_order": list(MEDP_EDGE_FEATURES),
-            "edge_feature_dim": MEDP_EDGE_FEATURE_DIM,
+            "edge_feature_schema": DE_MRST_EDGE_FEATURE_SCHEMA,
+            "edge_feature_order": list(DE_MRST_EDGE_FEATURES),
+            "edge_feature_dim": DE_MRST_EDGE_FEATURE_DIM,
             "edge_transition_registered": self.recurrent_steps > 1,
             "retained_components": components,
             "parameter_and_compute_reductions": reductions,
@@ -198,25 +198,25 @@ class FormalMEDPConfig:
         return metadata
 
 
-class FormalMEDPPolicy(DecentralizedAMPolicy):
+class DeMRSTPolicy(DecentralizedAMPolicy):
     """D-AM policy augmented by parameter-shared pair reasoning."""
 
     method_name = DE_MRST_NAME
     requires_lookahead = False
 
-    def __init__(self, config: FormalMEDPConfig = None):
-        self.medp_config = config or FormalMEDPConfig()
-        self.medp_config.validate()
-        super().__init__(self.medp_config.backbone)
+    def __init__(self, config: DeMRSTConfig = None):
+        self.de_mrst_config = config or DeMRSTConfig()
+        self.de_mrst_config.validate()
+        super().__init__(self.de_mrst_config.backbone)
         # Do not retain the inherited, now-unused 3d-to-d decoder projection.
         del self.context_projection
-        cfg = self.medp_config
+        cfg = self.de_mrst_config
         embedding_dim = self.config.embedding_dim
 
         self.task_edge_projection = nn.Linear(embedding_dim, cfg.edge_dim, bias=False)
         self.agent_edge_projection = nn.Linear(embedding_dim, cfg.edge_dim, bias=False)
         self.current_edge_projection = nn.Linear(embedding_dim, cfg.edge_dim, bias=False)
-        self.geometry_edge_projection = nn.Linear(MEDP_EDGE_FEATURE_DIM, cfg.edge_dim)
+        self.geometry_edge_projection = nn.Linear(DE_MRST_EDGE_FEATURE_DIM, cfg.edge_dim)
         self.edge_input_norm = RMSNorm(cfg.edge_dim)
         self.edge_transition = (
             EdgeTransition(
@@ -332,7 +332,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
         self._runtime_assert(
             (mbr_count >= 1) & (dor_count >= 1),
             ValueError,
-            "MEDP needs both robot roles",
+            "De-MRST needs both robot roles",
         )
         complementary = torch.where(current_is_mbr[:, None], ~is_mbr, is_mbr)
         candidate_mask = ~complementary[:, None].expand(-1, task_count, -1)
@@ -363,7 +363,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
         task_to_agent_mask = torch.where(
             fixed_partner[..., None], owner_mask, candidate_mask
         )
-        if self.medp_config.ablation == "no_exact_binding":
+        if self.de_mrst_config.ablation == "no_exact_binding":
             # Keep the committed-owner relation in fixed_partner for geometry
             # and diagnostics. Only the hard attention restriction is removed.
             task_to_agent_mask = candidate_mask
@@ -448,7 +448,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             + self.current_edge_projection(current_agent)[:, None, None]
             + self.geometry_edge_projection(geometry)
         )
-        for _ in range(self.medp_config.recurrent_steps - 1):
+        for _ in range(self.de_mrst_config.recurrent_steps - 1):
             assert self.edge_transition is not None
             edge_state = self.edge_transition(edge_state, task_state, agent_state)
         return (
@@ -481,7 +481,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
         # rules.  Keeping the registered modules preserves parameter shapes.
         pooling_edge_state = (
             torch.zeros_like(edge_state)
-            if self.medp_config.ablation == "no_edge_context"
+            if self.de_mrst_config.ablation == "no_edge_context"
             else edge_state
         )
         compatibility = self.pool_norm_factor * torch.matmul(
@@ -499,13 +499,13 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             task_mask = torch.where(
                 fixed_partner[..., None], owner_mask, ~complementary[:, None, :]
             )
-            if self.medp_config.ablation == "no_exact_binding":
+            if self.de_mrst_config.ablation == "no_exact_binding":
                 task_mask = (~complementary[:, None, :]).expand(
                     -1, task_inputs.size(1), -1
                 )
             legal_empty = ~action_mask & task_allocation_masks(task_inputs)[0]
         poolable_tasks = legal_empty
-        if self.medp_config.ablation == "no_cross_task_competition":
+        if self.de_mrst_config.ablation == "no_cross_task_competition":
             # Remove only the partner-to-task factor, not learned partner scores.
             pooled_weight = _masked_softmax(compatibility, task_mask, dim=-1)
             pooled_weight = torch.where(
@@ -522,7 +522,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             pooled_weight = torch.where(
                 poolable_tasks[..., None], pooled_weight, torch.zeros_like(pooled_weight)
             )
-        if self.medp_config.ablation == "no_exact_binding":
+        if self.de_mrst_config.ablation == "no_exact_binding":
             # Open tasks get ordinary learned partner attention. They remain
             # excluded from the cross-task competition among legal empty tasks.
             open_task_weight = task_to_partner
@@ -569,7 +569,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
         pair_bias = torch.tanh(self.glimpse_pair_gates)[:, None, None, None] * (
             pair_evidence[None, :, None, :] + torch.tanh(edge_bias)[:, :, None, :]
         )
-        compatibility = compatibility + self.medp_config.pair_logit_limit * pair_bias
+        compatibility = compatibility + self.de_mrst_config.pair_logit_limit * pair_bias
         expanded_mask = action_mask.view(
             1, batch_size, query_count, task_count
         ).expand_as(compatibility)
@@ -599,7 +599,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             self.pointer_edge_score(pair_edge).squeeze(-1)
         )
         compatibility = compatibility + (
-            self.medp_config.pair_logit_limit
+            self.de_mrst_config.pair_logit_limit
             * torch.tanh(self.pointer_pair_gate)
             * pair_residual[:, None, :]
         )
@@ -639,7 +639,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             legal_empty,
         )
         task_state = self.task_conditioner(torch.cat((task_state, partner_message), dim=-1))
-        if self.medp_config.query_fusion_contexts == 3:
+        if self.de_mrst_config.query_fusion_contexts == 3:
             query_input = query_context
         else:
             legal = (~action_mask).to(dtype=task_state.dtype)
@@ -649,7 +649,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             ) / legal_count
             query_input = torch.cat((query_context, partner_summary), dim=-1)
         query = self.query_conditioner(query_input).unsqueeze(1)
-        if self.medp_config.ablation == "no_pair_decoder":
+        if self.de_mrst_config.ablation == "no_pair_decoder":
             first_glimpse = self.glimpse(
                 query,
                 task_state,
@@ -660,8 +660,8 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
                 query, task_state, action_mask, pair_edge, pair_evidence
             )
         decoder_state = query + first_glimpse
-        if self.medp_config.decoder_glimpses == 2:
-            if self.medp_config.ablation == "no_pair_decoder":
+        if self.de_mrst_config.decoder_glimpses == 2:
+            if self.de_mrst_config.ablation == "no_pair_decoder":
                 second_glimpse = self.glimpse(
                     decoder_state,
                     task_state,
@@ -674,7 +674,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
             decoder_state = decoder_state + torch.tanh(
                 self.second_glimpse_gate
             ) * second_glimpse
-        if self.medp_config.ablation == "no_pair_decoder":
+        if self.de_mrst_config.ablation == "no_pair_decoder":
             logits = self.pointer.logits(decoder_state, task_state, action_mask)
         else:
             logits = self._pointer_logits(
@@ -691,7 +691,7 @@ class FormalMEDPPolicy(DecentralizedAMPolicy):
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         self._validate_inputs(task_inputs, agent_inputs, action_mask, agent_index)
         self._validate_owner_features(task_inputs, agent_inputs)
-        chunk_size = self.medp_config.forward_chunk_size
+        chunk_size = self.de_mrst_config.forward_chunk_size
         if chunk_size == 0 or task_inputs.size(0) <= chunk_size:
             return self._forward_impl(
                 task_inputs, agent_inputs, action_mask, agent_index

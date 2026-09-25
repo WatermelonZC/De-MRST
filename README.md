@@ -48,7 +48,7 @@ select the paper's training settings. For N=20:
 ```bash
 python scripts/train.py \
   --protocol-id paper_n20 \
-  --method medp_1r \
+  --method de_mrst \
   --model-seed 1103 \
   --device cuda \
   --output-dir runs/n20

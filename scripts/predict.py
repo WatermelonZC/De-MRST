@@ -20,7 +20,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--instance", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path)
-    parser.add_argument("--method", choices=("auto", "medp_1r", "d_am", "hetmrta_mrs"), default="auto")
+    parser.add_argument("--method", choices=("auto", "de_mrst", "d_am", "hetmrta_mrs"), default="auto")
     parser.add_argument("--samples", type=int, default=0,
                         help="0: greedy; positive: return the best of this many sampled rollouts")
     parser.add_argument("--batch-size", type=int, default=128,
@@ -39,7 +39,7 @@ def main():
     device = torch.device(args.device)
     metadata = torch.load(checkpoint, map_location="cpu", weights_only=False)
     method_by_name = {
-        "De-MRST": "medp_1r", "D-AM": "d_am", "HetMRTA-RL-MRS": "hetmrta_mrs"
+        "De-MRST": "de_mrst", "D-AM": "d_am", "HetMRTA-RL-MRS": "hetmrta_mrs"
     }
     stored_method = method_by_name.get(metadata.get("method"))
     if stored_method is None:
@@ -49,7 +49,7 @@ def main():
         raise ValueError(f"checkpoint contains {stored_method}, not {method}")
     model, payload = load_policy_checkpoint(method, checkpoint, device)
     model.eval()
-    config = getattr(model, "medp_config", model.config)
+    config = getattr(model, "de_mrst_config", model.config)
     backbone = getattr(config, "backbone", config)
     if (instance.n_mbr, instance.n_dor) != (backbone.n_mbr, backbone.n_dor):
         raise ValueError("instance fleet size differs from the checkpoint input width")

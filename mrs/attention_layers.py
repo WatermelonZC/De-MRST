@@ -1,4 +1,4 @@
-"""Shared attention primitives used by the current MEDP network."""
+"""Shared attention primitives used by the current De-MRST network."""
 
 import torch
 from torch import nn

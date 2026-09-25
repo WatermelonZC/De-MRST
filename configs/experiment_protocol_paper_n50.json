@@ -1,8 +1,8 @@
 {
   "status": "frozen_before_formal_training_and_test_evaluation",
   "architecture_freeze": {
-    "medp_decoder_glimpses": 1,
-    "medp_query_fusion_contexts": 3
+    "de_mrst_decoder_glimpses": 1,
+    "de_mrst_query_fusion_contexts": 3
   },
   "centralized": {
     "C-ALNS": {
@@ -92,7 +92,7 @@
       "full"
     ],
     "authorized_training_methods": [
-      "medp_1r",
+      "de_mrst",
       "d_am",
       "hetmrta_mrs"
     ],
@@ -149,7 +149,7 @@
     "learning_rate": 1e-05,
     "max_gradient_norm": 100.0,
     "max_open_tasks_training": 5,
-    "medp_policy_forward_chunk_size": 0,
+    "de_mrst_policy_forward_chunk_size": 0,
     "model_seeds": [
       1103
     ],
@@ -202,7 +202,7 @@
   },
   "information_boundary": {
     "D_AM_input_change": "No extra inputs beyond the common observation.",
-    "MEDP_only_addition": "Partner reasoning from communicated state; empty/open from missing roles and committed partners from owner bits. No lookahead.",
+    "de_mrst_only_addition": "Partner reasoning from communicated state; empty/open from missing roles and committed partners from owner bits. No lookahead.",
     "agent_feature_dim": 8,
     "all_decentralized_methods": "Identical completed/requirement/owner observations, robot states, normalization and action masks for every authorized method/variant.",
     "base_task_feature_dim": 9,
@@ -284,7 +284,7 @@
         "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
         "task_status_encoding": "task_completed_binary"
       },
-      "medp_1r": {
+      "de_mrst": {
         "agent_feature_dim": 8,
         "base_task_feature_dim": 9,
         "cross_fleet_checkpoint_generalization": false,
@@ -422,7 +422,7 @@
         "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4"
       }
     },
-    "medp_1r": {
+    "de_mrst": {
       "checkpoint_schema_version": 13,
       "parameter_count": 354345,
       "policy_config": {
@@ -594,27 +594,27 @@
     "test": "37b3ac7b2b6e7118b1c348892d272ea47f18cfc02ee681cf51206c806baf9b1b"
   },
   "source_sha256_lf": {
-    "mrs/attention_layers.py": "a5f6dee5419902443e5b0f1a7bb2e743704da3d29060046c7ca4572174342b34",
+    "mrs/attention_layers.py": "afa3fa5459c0f1f8d61c63519d830573c6348dba0603a69b6bfb61223d18eaeb",
     "mrs/core.py": "bda7fd8598fdabbb365c1f6c21f13864116a2bfacd1d62a99cf1d52f2fdb1ab6",
     "mrs/c_am.py": "49ef45f474dc0781ffd654f17abc582d03f294742def0b36843de890688b34a4",
-    "mrs/decentralized_am.py": "1688277c121caeb76722e00a8031c38446e393d573fc9fc6e8feed90602cc229",
+    "mrs/decentralized_am.py": "e5a53061638e49be3b2613ac5e0d0fa8aea69c85bea8b7a5ad4874b5722a438e",
     "mrs/decentralized_am_checkpoint.py": "e40fda27ddd70524e7d8338c57a901cf599a1eefc52137e2cb74abd1cd631822",
     "mrs/decentralized_checkpoint.py": "8e5deada79a6141bc81422c2f1116deb59ba01172ec3879a04cba7d3831ae9bd",
     "mrs/decentralized_market.py": "e2dd454aaad3300ea12919c23ec11c828b84835c839278423a658b36aa4409e9",
     "mrs/decentralized_policy.py": "65350552d846e7b085e04c8acc958cdf9cf6cb3cafa4ebd76b01884690d63d73",
     "mrs/decentralized_rollout.py": "7a5dd460c7631de2ca3928ad64919f629ebf1a001f8abe5a8fb0be86c76ee7fc",
+    "mrs/de_mrst.py": "a97ac65615c54143f618fcf5633a6f663e8cb2733a2f3607c9364d6eab336772",
+    "mrs/de_mrst_checkpoint.py": "3dcfe975daeecf1f6aab0e65baec46a1313b7b07755d476e3d671c9f92ba153e",
     "mrs/event_env.py": "38e497f1d2a700732977a08c94cf80fb99da2455fc210f64f26ed3a36a1d3baf",
-    "mrs/formal_medp.py": "26b2a6ecfbe9944dbb5cb70aca65e2a0d53b7a5a40783a41671b22728f702f78",
-    "mrs/formal_medp_checkpoint.py": "bcd4712b3adf64aa4ae22b0a886f2fbb304f3c9f47243dd447eb547cd9618d7d",
     "mrs/greedy_cache.py": "d6522c46a27e933d47b84fd6c7d46377e9c0efae22c2d0b237165faf95b905c2",
     "mrs/gurobi_compact.py": "3d2dea64944dc99360884238f64b435423abf33e119516e87f1f9c8610ca030b",
     "mrs/gurobi_makespan.py": "012f891db5d6b88ede881963050089cd0e3b020de27e314f27eada7eb5bcb869",
     "mrs/gurobi_validation.py": "7d2cb52853839ebf3edfb2164925304419e1b79643fc6bb662a487ccf5294079",
     "mrs/instances.py": "e64840d9a18dd26dfffb34a8e57277fcaf2101238bd8b9579df1b9411caa720f",
     "mrs/lookahead.py": "7da1e24551d809cc5d9a407ee8672e43aad92e3a77bda3e0faee173b6a9f1768",
-    "mrs/method_names.py": "07e73812ef8fbdb37ffaaa957ff34bfe0579fa5eccc5647528975776d2507d3e",
-    "mrs/observations.py": "b369f074f028f08be2b31c405aeec0e06d9c9a422a0b924dac6f715a1c2cebaa",
-    "mrs/policies.py": "4ca50d235702720245736f6d75338a607d9ff8fba4603b3edb9e20ae434251a5",
+    "mrs/method_names.py": "47c6b8f0e618de9a3161a148d19605f9d253ee5818ca902df0e13cf7ebf4d96e",
+    "mrs/observations.py": "9c9f5ccd1c09d559924814557e63c68c350e8c20d135d7c911682b1ef9abd7ed",
+    "mrs/policies.py": "10107af21a9ffcf0cc3d2c76a7c3e20e01ee13876e0be2a0b08856fdbc521ca1",
     "mrs/protocol.py": "377ccb54d1630bee5d5922aa1711bad692fe0d07545c92e0362e2c4ec964ff82",
     "mrs/repro.py": "6ad6e535403f2d33e300c6035c59e638c0acd519c3953da8dd7e13dcceab988e",
     "mrs/results.py": "00364aab8992e6d7f1d18081b907ca3fc71bd90a78b170acc83106046442f5c6",
@@ -648,10 +648,10 @@
     "problems/centralized_mrs/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "scripts/baselines.py": "9dbaa1a6c53674067861d306b5088b1114bdd68ce87906aabe261fccc2541ff1",
     "scripts/evaluate.py": "94821849fe62159fb93aba8c76c880f0027d69e69bd0aa9e8e3b37029e7c4d0d",
-    "scripts/predict.py": "64fb7c5ebf004af726e9a99543cba52abd5e4a0ad5e2bbb94a6a64bbb7e03449",
+    "scripts/predict.py": "b36d5a2773492501dacf8cc4a4ccf4fb5f7d69258033ae06899fb91c9dbfea07",
     "scripts/run_centralized.py": "686721aa89231493ca3a51e1ee11079759d6567764c8f3b92c325da93edaa394",
-    "scripts/train.py": "d606e307063f2ecf2301e05862ce0ba5870ea857963dbfb25c3fc9ca7ab1e98f",
+    "scripts/train.py": "9e2934898e8aba0670beb20e115213e10f2445877382d01dba4199358399fbd3",
     "scripts/train_c_am_formal.py": "77eeb5c73c223fbde4436db0e6284bc8d87b627d968b87bead8845254b688467",
-    "scripts/verify_release.py": "7e101b7d8948e145c495c7ef90b416b519d92841ee07ef9d74909840285e8eff"
+    "scripts/verify_release.py": "7741f9849667aa571768090d2091a5833d0400c219ea7f00188acc8515b73638"
   }
 }

@@ -55,7 +55,7 @@ class DecentralizedAMConfig:
             or self.task_observation_schema != TASK_OBSERVATION_SCHEMA
         ):
             raise ValueError(
-                "Task feature width or schema differs from the current AM/MEDP contract. "
+                "Task feature width or schema differs from the current AM/De-MRST contract. "
                 "Retrain or use the checkpoint's original source snapshot."
             )
 
@@ -178,7 +178,7 @@ class DecentralizedAMPolicy(nn.Module):
             )
 
     def _assigned_owner_indices(self, task_inputs):
-        """Derive exact current assignment rows for MEDP masks, not new inputs."""
+        """Derive exact current assignment rows for De-MRST masks, not new inputs."""
         cr, wr = self._owner_vectors(task_inputs)
         return torch.stack((
             torch.where(cr.sum(-1) > 0, cr.argmax(-1), -1),

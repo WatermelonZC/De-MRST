@@ -24,12 +24,12 @@ from mrs.observations import (
     validate_protocol_ablation,
 )
 from mrs.protocol import validate_protocol_source_files
-from mrs.formal_medp import FormalMEDPPolicy
-from mrs.policies import METHOD_LABELS, FORMAL_MEDP_METHODS, build_model, save_policy_checkpoint
-from mrs.formal_medp import MEDP_ABLATIONS
-from mrs.formal_medp_checkpoint import (
-    load_formal_medp_checkpoint,
-    save_formal_medp_checkpoint,
+from mrs.de_mrst import DeMRSTPolicy
+from mrs.policies import METHOD_LABELS, DE_MRST_METHODS, build_model, save_policy_checkpoint
+from mrs.de_mrst import DE_MRST_ABLATIONS
+from mrs.de_mrst_checkpoint import (
+    load_de_mrst_checkpoint,
+    save_de_mrst_checkpoint,
 )
 from mrs.protocol import (
     load_frozen_protocol,
@@ -62,10 +62,10 @@ def parse_args():
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument(
-        "--medp-ablation",
-        choices=MEDP_ABLATIONS,
+        "--de-mrst-ablation",
+        choices=DE_MRST_ABLATIONS,
         default="full",
-        help="MEDP pair-mechanism ablation; only applies to formal MEDP variants",
+        help="De-MRST pair-mechanism ablation",
     )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--smoke", action="store_true")
@@ -330,14 +330,14 @@ def evaluate(
 
 def model_metadata(method, model):
     """Return architecture metadata for methods that freeze it explicitly."""
-    if method not in FORMAL_MEDP_METHODS:
+    if method not in DE_MRST_METHODS:
         return None
-    if not isinstance(model, FormalMEDPPolicy):
-        raise TypeError("formal MEDP metadata requires FormalMEDPPolicy")
+    if not isinstance(model, DeMRSTPolicy):
+        raise TypeError("De-MRST metadata requires DeMRSTPolicy")
     return {
         "method_id": method,
         "method_label": METHOD_LABELS[method],
-        "policy_config": model.medp_config.to_dict(),
+        "policy_config": model.de_mrst_config.to_dict(),
         "task_observation_schema": model.task_observation_schema,
         "trainable_parameter_count": sum(
             parameter.numel() for parameter in model.parameters()
@@ -350,7 +350,7 @@ def model_metadata(method, model):
 def main():
     args = parse_args()
     frozen = load_frozen_protocol(PROJECT_ROOT, args.protocol_id)
-    validate_protocol_ablation(frozen.protocol, args.method, args.medp_ablation)
+    validate_protocol_ablation(frozen.protocol, args.method, args.de_mrst_ablation)
     validate_protocol_observation_schema(frozen.protocol, method=args.method)
     validate_protocol_source_files(PROJECT_ROOT, frozen.protocol)
     protocol = frozen.protocol["decentralized_training"]
@@ -369,8 +369,8 @@ def main():
         raise RuntimeError("protocol does not authorize the tensorized trainer")
     if args.model_seed not in protocol["model_seeds"]:
         raise ValueError("model seed is not frozen in the protocol")
-    if args.method not in FORMAL_MEDP_METHODS and args.medp_ablation != "full":
-        raise ValueError("--medp-ablation only applies to formal MEDP variants")
+    if args.method not in DE_MRST_METHODS and args.de_mrst_ablation != "full":
+        raise ValueError("--de-mrst-ablation only applies to De-MRST")
     authorized_methods = protocol.get("authorized_training_methods")
     if authorized_methods and args.method not in authorized_methods:
         raise ValueError("method is not authorized by the frozen protocol")
@@ -473,8 +473,8 @@ def main():
         "torch_compile": False,
         "cuda_allocator_config": allocator_config,
     }
-    if args.method in FORMAL_MEDP_METHODS:
-        training_config["medp_ablation"] = args.medp_ablation
+    if args.method in DE_MRST_METHODS:
+        training_config["de_mrst_ablation"] = args.de_mrst_ablation
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     best_path = args.output_dir / "best.pt"
@@ -487,33 +487,33 @@ def main():
     frozen_forward_chunk = None
     frozen_decoder_glimpses = 1
     frozen_query_fusion_contexts = 3
-    if args.method in FORMAL_MEDP_METHODS:
-        frozen_forward_chunk = protocol.get("medp_policy_forward_chunk_size")
+    if args.method in DE_MRST_METHODS:
+        frozen_forward_chunk = protocol.get("de_mrst_policy_forward_chunk_size")
         if frozen_forward_chunk is None:
             raise RuntimeError(
-                "MEDP protocol must freeze its policy forward chunk size"
+                "De-MRST protocol must freeze its policy forward chunk size"
             )
         frozen_decoder_glimpses = frozen.protocol.get(
             "architecture_freeze", {}
-        ).get("medp_decoder_glimpses", 1)
+        ).get("de_mrst_decoder_glimpses", 1)
         frozen_query_fusion_contexts = frozen.protocol.get(
             "architecture_freeze", {}
-        ).get("medp_query_fusion_contexts", 3)
+        ).get("de_mrst_query_fusion_contexts", 3)
     model = build_model(
         args.method,
         device,
-        args.medp_ablation,
-        medp_forward_chunk_size=frozen_forward_chunk,
-        medp_decoder_glimpses=frozen_decoder_glimpses,
-        medp_query_fusion_contexts=frozen_query_fusion_contexts,
+        args.de_mrst_ablation,
+        de_mrst_forward_chunk_size=frozen_forward_chunk,
+        de_mrst_decoder_glimpses=frozen_decoder_glimpses,
+        de_mrst_query_fusion_contexts=frozen_query_fusion_contexts,
         n_mbr=int(setting["n_mbr"]),
         n_dor=int(setting["n_dor"]),
     )
     validate_model_observation_protocol(frozen.protocol, args.method, model)
-    if args.method in FORMAL_MEDP_METHODS:
-        if int(frozen_forward_chunk) != model.medp_config.forward_chunk_size:
+    if args.method in DE_MRST_METHODS:
+        if int(frozen_forward_chunk) != model.de_mrst_config.forward_chunk_size:
             raise RuntimeError(
-                "MEDP policy forward chunk differs from the frozen protocol"
+                "De-MRST policy forward chunk differs from the frozen protocol"
             )
     active_model_metadata = model_metadata(args.method, model)
     if active_model_metadata is not None:
@@ -778,13 +778,13 @@ def main():
 
         if not best_path.exists():
             raise RuntimeError("formal training produced no validation checkpoint")
-        if args.method in FORMAL_MEDP_METHODS:
-            audited_model, audited_payload = load_formal_medp_checkpoint(
+        if args.method in DE_MRST_METHODS:
+            audited_model, audited_payload = load_de_mrst_checkpoint(
                 best_path, torch.device("cpu")
             )
             if audited_payload["training_config"] != training_config:
                 raise RuntimeError(
-                    "MEDP best checkpoint metadata differs from the run"
+                    "De-MRST best checkpoint metadata differs from the run"
                 )
             del audited_model, audited_payload
         best_row = min(
