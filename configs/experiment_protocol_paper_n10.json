@@ -1,0 +1,657 @@
+{
+  "status": "frozen_before_formal_training_and_test_evaluation",
+  "architecture_freeze": {
+    "medp_decoder_glimpses": 1,
+    "medp_query_fusion_contexts": 3
+  },
+  "centralized": {
+    "C-ALNS": {
+      "configuration": "configs/centralized_v1.json",
+      "search_seconds": 30,
+      "seeds": [
+        1103,
+        2207,
+        3301,
+        4409,
+        5501
+      ]
+    },
+    "C-AM": {
+      "amp_overflow_behavior": "skip non-finite optimizer update and reduce GradScaler scale",
+      "batch_revision": "user-authorized replacement of the incomplete v3 C-AM batch-256 run",
+      "checkpoint_selection": [
+        "lowest mean validation J",
+        "earlier epoch"
+      ],
+      "decoder": [
+        "Task",
+        "DOR",
+        "MBR"
+      ],
+      "embedding_dim": 128,
+      "encoder": "standard GraphAttentionEncoder",
+      "epochs": 100,
+      "instances_per_epoch": 1280000,
+      "learning_rate": 0.0001,
+      "learning_rate_scaling": "none; retain the original AM learning rate 1e-4",
+      "max_gradient_norm": 1.0,
+      "model_seeds": [
+        1103
+      ],
+      "optimizer_steps_per_epoch": 1250,
+      "optimizer_steps_per_seed": 125000,
+      "reinforce_baseline": "rollout baseline updated only by one-sided paired validation test at alpha 0.05",
+      "specialization_unit": "one model for N=20 and fleet (4,8)",
+      "test_requires_matching_training_setting": true,
+      "training_batch_size": 1024,
+      "training_instances_per_seed": 128000000,
+      "training_precision": "float16 autocast with GradScaler",
+      "training_settings": [
+        {
+          "distribution": "uniform",
+          "dor_speed": 2.4,
+          "due_time_profile": "linear_50_noise15",
+          "handling_time_range": [
+            40.0,
+            120.0
+          ],
+          "mbr_speed": 1.2,
+          "n_dor": 8,
+          "n_mbr": 4,
+          "pickup_time_range": [
+            15.0,
+            45.0
+          ],
+          "setting_id": "n10_m4_o8",
+          "speed": 1.8,
+          "task_count": 10
+        }
+      ],
+      "validation_instances": 10000,
+      "validation_interval_instances": 1280000,
+      "validation_precision": "float32"
+    },
+    "C-GA": {
+      "crossover_rate": 0.9,
+      "mutation_rate": 0.1,
+      "population_size": 100,
+      "search_seconds": 30,
+      "seeds": [
+        1103,
+        2207,
+        3301,
+        4409,
+        5501
+      ]
+    },
+    "C-Greedy": "complete earliest-due-date insertion constructor",
+    "reported_GA_ALNS_time": "cached greedy construction time plus 30-second search"
+  },
+  "decentralized_training": {
+    "ablation_variants": [
+      "full"
+    ],
+    "authorized_training_methods": [
+      "medp_1r",
+      "d_am",
+      "hetmrta_mrs"
+    ],
+    "checkpoint_resume_policy": "Fresh v38 study; resume only a matching protocol hash, setting, seed, model configuration, ablation and trainer state. Existing runs retain their original source snapshot.",
+    "checkpoint_selection": [
+      "lowest mean validation J including failure penalty",
+      "higher validation success rate",
+      "earlier training step"
+    ],
+    "clean_restart_required": true,
+    "complete_episode_definition": "one full 2N=20 decision rollout ending in terminal J",
+    "constrained_flashforward_training": true,
+    "cuda_allocator_config": "expandable_segments:True",
+    "decision_batch_size": 2560,
+    "decision_sampling": "Online reservoir uniformly retains one decision from each complete episode. It estimates the episode mean per-decision REINFORCE loss; terminal cost and the POMO repeat-average baseline remain unchanged.",
+    "decision_sampling_runtime": "online_reservoir_v1",
+    "epochs": 100,
+    "exact_epoch_rollout_chunking": {
+      "epoch_totals": {
+        "complete_episodes": 1280000,
+        "optimizer_updates": 500,
+        "replay_decisions": 1280000,
+        "unique_instances": 128000
+      },
+      "mode": "exact_epoch_full_chunks_plus_final_remainder_v1",
+      "nominal_rollout_unique_batch_size": 8192,
+      "plan": [
+        {
+          "complete_episodes_each": 81920,
+          "count": 15,
+          "kind": "full",
+          "optimizer_updates_each": 32,
+          "replay_decisions_each": 81920,
+          "unique_instances_each": 8192
+        },
+        {
+          "complete_episodes_each": 51200,
+          "count": 1,
+          "kind": "final_remainder",
+          "optimizer_updates_each": 20,
+          "replay_decisions_each": 51200,
+          "unique_instances_each": 5120
+        }
+      ],
+      "rollout_chunk_count": 16
+    },
+    "executed_decisions_per_episode": 20,
+    "executed_decisions_per_epoch": 25600000,
+    "executed_decisions_per_seed": 2560000000,
+    "float32_matmul_precision": "highest",
+    "inference_constraints": [
+      "role_ability_legality_mask"
+    ],
+    "learning_rate": 1e-05,
+    "max_gradient_norm": 100.0,
+    "max_open_tasks_training": 5,
+    "medp_policy_forward_chunk_size": 8192,
+    "model_seeds": [
+      1103
+    ],
+    "objective_mode": "makespan_distance",
+    "optimizer_steps_per_epoch": 500,
+    "optimizer_steps_per_seed": 50000,
+    "physical_state_dtype": "float64",
+    "policy_dtype": "float32",
+    "pomo_repeats_per_instance": 10,
+    "replay_decisions_per_epoch": 1280000,
+    "replay_decisions_per_seed": 128000000,
+    "replay_microbatch_size": 2048,
+    "rollout_engine": "tensorized_gpu_v1",
+    "rollout_unique_batch_size": 8192,
+    "runtime_batch_contract": "rollout batch 8192, POMO 10, 128000 unique instances, 1280000 complete episodes, one reservoir sample per episode, 1280000 replay decisions, 500 optimizer updates, decision batch 2560, replay microbatch 2048, De-MRST chunk 8192, float32 matmul highest, CUDA allocator expandable_segments:True",
+    "sampled_decisions_per_episode": 1,
+    "sampled_episodes_per_epoch": 1280000,
+    "sampled_episodes_per_seed": 128000000,
+    "specialization_unit": "one model for N=10 and fleet (4,8)",
+    "tensorized_scheduler": "batched CFM with randomized per-event agent order",
+    "test_requires_matching_training_setting": true,
+    "torch_compile": false,
+    "training_settings": [
+      {
+        "distribution": "uniform",
+        "dor_speed": 2.4,
+        "due_time_profile": "linear_50_noise15",
+        "handling_time_range": [
+          40.0,
+          120.0
+        ],
+        "mbr_speed": 1.2,
+        "n_dor": 8,
+        "n_mbr": 4,
+        "pickup_time_range": [
+          15.0,
+          45.0
+        ],
+        "setting_id": "n10_m4_o8",
+        "speed": 1.8,
+        "task_count": 10
+      }
+    ],
+    "uniform_extension_rule": "Any budget extension requires a new protocol and equal treatment of all three methods.",
+    "unique_training_instances_per_epoch": 128000,
+    "unique_training_instances_per_seed": 12800000,
+    "validation_instances": 10000,
+    "validation_interval": "once per epoch",
+    "validation_interval_unique_instances": 128000
+  },
+  "information_boundary": {
+    "D_AM_input_change": "No extra inputs beyond the common observation.",
+    "MEDP_only_addition": "Partner reasoning from communicated state; empty/open from missing roles and committed partners from owner bits. No lookahead.",
+    "agent_feature_dim": 8,
+    "all_decentralized_methods": "Identical completed/requirement/owner observations, robot states, normalization and action masks for every authorized method/variant.",
+    "base_task_feature_dim": 9,
+    "cross_fleet_checkpoint_generalization": false,
+    "extra_owner_index_input": false,
+    "global_communication": true,
+    "identity_relabeling_invariance_guaranteed": false,
+    "known_tasks": true,
+    "method_observations": {
+      "d_am": {
+        "agent_feature_dim": 8,
+        "base_task_feature_dim": 9,
+        "cross_fleet_checkpoint_generalization": false,
+        "extra_owner_index_input": false,
+        "identity_relabeling_invariance_guaranteed": false,
+        "n_dor": 8,
+        "n_mbr": 4,
+        "owner_encoding": "role_local_one_hot_zero_unassigned",
+        "task_feature_dim": 21,
+        "task_feature_order": [
+          "remaining_mbr",
+          "remaining_dor",
+          "cr_owner_0",
+          "cr_owner_1",
+          "cr_owner_2",
+          "cr_owner_3",
+          "wr_owner_0",
+          "wr_owner_1",
+          "wr_owner_2",
+          "wr_owner_3",
+          "wr_owner_4",
+          "wr_owner_5",
+          "wr_owner_6",
+          "wr_owner_7",
+          "source_dx",
+          "source_dy",
+          "destination_dx",
+          "destination_dy",
+          "pickup_time",
+          "handling_time",
+          "completed"
+        ],
+        "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
+        "task_status_encoding": "task_completed_binary"
+      },
+      "hetmrta_mrs": {
+        "agent_feature_dim": 8,
+        "base_task_feature_dim": 9,
+        "cross_fleet_checkpoint_generalization": false,
+        "extra_owner_index_input": false,
+        "identity_relabeling_invariance_guaranteed": false,
+        "n_dor": 8,
+        "n_mbr": 4,
+        "owner_encoding": "role_local_one_hot_zero_unassigned",
+        "task_feature_dim": 21,
+        "task_feature_order": [
+          "remaining_mbr",
+          "remaining_dor",
+          "cr_owner_0",
+          "cr_owner_1",
+          "cr_owner_2",
+          "cr_owner_3",
+          "wr_owner_0",
+          "wr_owner_1",
+          "wr_owner_2",
+          "wr_owner_3",
+          "wr_owner_4",
+          "wr_owner_5",
+          "wr_owner_6",
+          "wr_owner_7",
+          "source_dx",
+          "source_dy",
+          "destination_dx",
+          "destination_dy",
+          "pickup_time",
+          "handling_time",
+          "completed"
+        ],
+        "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
+        "task_status_encoding": "task_completed_binary"
+      },
+      "medp_1r": {
+        "agent_feature_dim": 8,
+        "base_task_feature_dim": 9,
+        "cross_fleet_checkpoint_generalization": false,
+        "extra_owner_index_input": false,
+        "identity_relabeling_invariance_guaranteed": false,
+        "n_dor": 8,
+        "n_mbr": 4,
+        "owner_encoding": "role_local_one_hot_zero_unassigned",
+        "task_feature_dim": 21,
+        "task_feature_order": [
+          "remaining_mbr",
+          "remaining_dor",
+          "cr_owner_0",
+          "cr_owner_1",
+          "cr_owner_2",
+          "cr_owner_3",
+          "wr_owner_0",
+          "wr_owner_1",
+          "wr_owner_2",
+          "wr_owner_3",
+          "wr_owner_4",
+          "wr_owner_5",
+          "wr_owner_6",
+          "wr_owner_7",
+          "source_dx",
+          "source_dy",
+          "destination_dx",
+          "destination_dy",
+          "pickup_time",
+          "handling_time",
+          "completed"
+        ],
+        "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
+        "task_status_encoding": "task_completed_binary"
+      }
+    },
+    "n_dor": 8,
+    "n_mbr": 4,
+    "observed_other_agent_state": [
+      "role",
+      "position",
+      "remaining_travel_time",
+      "remaining_execution_time",
+      "waiting_state"
+    ],
+    "observed_task_state": [
+      "remaining_mbr",
+      "remaining_dor",
+      "cr_owner_0",
+      "cr_owner_1",
+      "cr_owner_2",
+      "cr_owner_3",
+      "wr_owner_0",
+      "wr_owner_1",
+      "wr_owner_2",
+      "wr_owner_3",
+      "wr_owner_4",
+      "wr_owner_5",
+      "wr_owner_6",
+      "wr_owner_7",
+      "source_dx",
+      "source_dy",
+      "destination_dx",
+      "destination_dy",
+      "pickup_time",
+      "handling_time",
+      "completed"
+    ],
+    "owner_encoding": "role_local_one_hot_zero_unassigned",
+    "shared_communicated_information": true,
+    "shared_raw_observation": true,
+    "task_feature_dim": 21,
+    "task_feature_order": [
+      "remaining_mbr",
+      "remaining_dor",
+      "cr_owner_0",
+      "cr_owner_1",
+      "cr_owner_2",
+      "cr_owner_3",
+      "wr_owner_0",
+      "wr_owner_1",
+      "wr_owner_2",
+      "wr_owner_3",
+      "wr_owner_4",
+      "wr_owner_5",
+      "wr_owner_6",
+      "wr_owner_7",
+      "source_dx",
+      "source_dy",
+      "destination_dx",
+      "destination_dy",
+      "pickup_time",
+      "handling_time",
+      "completed"
+    ],
+    "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
+    "task_status_encoding": "task_completed_binary",
+    "unobserved": [
+      "other_agents_future_actions"
+    ]
+  },
+  "method_architectures": {
+    "d_am": {
+      "checkpoint_schema_version": 7,
+      "parameter_count": 349440,
+      "policy_config": {
+        "agent_input_dim": 8,
+        "embedding_dim": 128,
+        "encoder_layers": 1,
+        "feed_forward_hidden": 512,
+        "n_dor": 8,
+        "n_heads": 8,
+        "n_mbr": 4,
+        "tanh_clipping": 10.0,
+        "task_input_dim": 21,
+        "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4"
+      }
+    },
+    "hetmrta_mrs": {
+      "checkpoint_schema_version": 6,
+      "parameter_count": 2582016,
+      "policy_config": {
+        "agent_encoder_layers": 1,
+        "agent_input_dim": 8,
+        "cross_decoder_layers": 2,
+        "embedding_dim": 128,
+        "feed_forward_hidden": 512,
+        "global_decoder_layers": 2,
+        "n_dor": 8,
+        "n_heads": 8,
+        "n_mbr": 4,
+        "tanh_clipping": 10.0,
+        "task_encoder_layers": 1,
+        "task_input_dim": 21,
+        "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4"
+      }
+    },
+    "medp_1r": {
+      "checkpoint_schema_version": 13,
+      "parameter_count": 354345,
+      "policy_config": {
+        "backbone": {
+          "task_input_dim": 21,
+          "agent_input_dim": 8,
+          "embedding_dim": 128,
+          "n_heads": 8,
+          "encoder_layers": 1,
+          "feed_forward_hidden": 512,
+          "tanh_clipping": 10.0,
+          "task_observation_schema": "marsupial_compact9_owner_onehot_completion_dai_order_v4",
+          "n_mbr": 4,
+          "n_dor": 8
+        },
+        "edge_dim": 32,
+        "bidirectional_cross_attention": false,
+        "node_updates": false,
+        "recurrent_steps": 1,
+        "edge_feed_forward_hidden": 64,
+        "conditioner_hidden": 32,
+        "fusion_type": "linear_relu_linear",
+        "fusion_normalization": "none",
+        "fusion_residual": false,
+        "fusion_gates": false,
+        "task_fusion_input_dim": 256,
+        "query_fusion_input_dim": 384,
+        "initial_query_projection_registered": false,
+        "partner_pool_rank": 48,
+        "decoder_glimpses": 1,
+        "pair_gate_init": 0.01,
+        "pair_logit_limit": 2.0,
+        "forward_chunk_size": 8192,
+        "ablation": "full",
+        "architecture": "dam_trunk_partner_pooling_paper_query_v12",
+        "edge_feature_schema": "marsupial_edge_offsets_manhattan_owner_v1",
+        "edge_feature_order": [
+          "source_dx_from_robot",
+          "source_dy_from_robot",
+          "target_dx_from_robot",
+          "target_dy_from_robot",
+          "source_distance",
+          "target_distance",
+          "committed_partner"
+        ],
+        "edge_feature_dim": 7,
+        "edge_transition_registered": false,
+        "retained_components": [
+          "exact_d_am_d128_h8_l1_ff512_trunk",
+          "dense_task_agent_edge_state",
+          "shared_task_and_robot_embeddings",
+          "task_partner_relu_mlp",
+          "paper_three_context_query_relu_mlp",
+          "single_am_glimpse",
+          "pair_aware_pointer",
+          "exact_open_owner_binding",
+          "role_local_one_hot_owner_task_features",
+          "legal_empty_task_partner_competition"
+        ],
+        "parameter_and_compute_reductions": [
+          "edge_width_32",
+          "fusion_mlp_hidden_width_32",
+          "initial_query_projection_removed",
+          "no_extra_node_mlps",
+          "partner_pooling_rank_48",
+          "inactive_edge_transition_not_registered",
+          "second_glimpse_not_registered"
+        ],
+        "parameter_sharing": {
+          "am_glimpse": "D-AM module applied once"
+        },
+        "information_boundary": "current_observation_only",
+        "positional_encoding": false,
+        "lookahead": false,
+        "query_fusion_contexts": 3
+      }
+    }
+  },
+  "objective": {
+    "carrier_distance": "system_distance",
+    "carrier_distance_time_weight": 0.3,
+    "carrier_speed": "instance.resolved_mbr_speed",
+    "due_time_in_objective": false,
+    "failure_penalty": "100 * N",
+    "formula": "J = 0.7 * makespan + 0.3 * carrier_distance / v_mbr",
+    "makespan_weight": 0.7,
+    "mode": "makespan_distance",
+    "reward": "-J"
+  },
+  "physical_instance_generation": {
+    "dor_speed": 2.4,
+    "due_time_formula": "due_time_i = 300 + 50 * i + 15 * u_i, u_i ~ U[0, 1)",
+    "due_time_used_by_policy": false,
+    "handling_time_distribution": "U[40, 120]",
+    "mbr_speed": 1.2,
+    "pickup_time_distribution": "U[15, 45]",
+    "setting": {
+      "distribution": "uniform",
+      "dor_speed": 2.4,
+      "due_time_profile": "linear_50_noise15",
+      "handling_time_range": [
+        40.0,
+        120.0
+      ],
+      "mbr_speed": 1.2,
+      "n_dor": 8,
+      "n_mbr": 4,
+      "pickup_time_range": [
+        15.0,
+        45.0
+      ],
+      "setting_id": "n10_m4_o8",
+      "speed": 1.8,
+      "task_count": 10
+    }
+  },
+  "problem": {
+    "deadlock_or_timeout_penalty": "100 * N",
+    "default_speed": 1.8,
+    "definition": "known-task decentralized asynchronous reactive Marsupial MRS scheduling",
+    "detach_time": 8.0,
+    "distance": "Manhattan",
+    "dock_time": 8.0,
+    "episode_timeout": "max(1000, 500 * N)",
+    "speed_source": "instance.speed",
+    "task_requirement": {
+      "DOR": 1,
+      "MBR": 1
+    },
+    "task_states": [
+      "empty",
+      "open",
+      "in_progress",
+      "completed"
+    ]
+  },
+  "test": {
+    "cell_count": 1,
+    "distributions": {
+      "uniform": "seen uniform N=10 generator"
+    },
+    "fleets": [
+      [
+        4,
+        8
+      ]
+    ],
+    "instance_count": 100,
+    "instances_per_cell": 100,
+    "learned_inference": "greedy",
+    "learned_model_seeds": [
+      1103
+    ],
+    "matching_training_setting_required": true,
+    "stochastic_search_seeds": [
+      1103,
+      2207,
+      3301,
+      4409,
+      5501
+    ],
+    "task_counts": [
+      10
+    ],
+    "test_set_may_not_be_used_for_tuning": true
+  },
+  "seed_manifest_sha256": {
+    "training_validation": "da74d768d2447e1ceb94851f013099781486e152cb76b18e5d1fd3d8eed19d66",
+    "test": "40c6add898ae086538ca7509d86467b1de27afb34a93b864f1cc8063ea70a666"
+  },
+  "source_sha256_lf": {
+    "mrs/attention_layers.py": "a5f6dee5419902443e5b0f1a7bb2e743704da3d29060046c7ca4572174342b34",
+    "mrs/core.py": "bda7fd8598fdabbb365c1f6c21f13864116a2bfacd1d62a99cf1d52f2fdb1ab6",
+    "mrs/c_am.py": "74cc77bbbdb625974912e10da40ce90e18a0e9440ac95dd07ab0f4b3c03def16",
+    "mrs/decentralized_am.py": "1688277c121caeb76722e00a8031c38446e393d573fc9fc6e8feed90602cc229",
+    "mrs/decentralized_am_checkpoint.py": "e40fda27ddd70524e7d8338c57a901cf599a1eefc52137e2cb74abd1cd631822",
+    "mrs/decentralized_checkpoint.py": "8e5deada79a6141bc81422c2f1116deb59ba01172ec3879a04cba7d3831ae9bd",
+    "mrs/decentralized_market.py": "e2dd454aaad3300ea12919c23ec11c828b84835c839278423a658b36aa4409e9",
+    "mrs/decentralized_policy.py": "65350552d846e7b085e04c8acc958cdf9cf6cb3cafa4ebd76b01884690d63d73",
+    "mrs/decentralized_rollout.py": "7a5dd460c7631de2ca3928ad64919f629ebf1a001f8abe5a8fb0be86c76ee7fc",
+    "mrs/event_env.py": "38e497f1d2a700732977a08c94cf80fb99da2455fc210f64f26ed3a36a1d3baf",
+    "mrs/formal_medp.py": "ccc94cd9c3823d507406685001790ec2d44c31f3ad2fdf964dcffea14233b514",
+    "mrs/formal_medp_checkpoint.py": "bcd4712b3adf64aa4ae22b0a886f2fbb304f3c9f47243dd447eb547cd9618d7d",
+    "mrs/greedy_cache.py": "d6522c46a27e933d47b84fd6c7d46377e9c0efae22c2d0b237165faf95b905c2",
+    "mrs/gurobi_compact.py": "3d2dea64944dc99360884238f64b435423abf33e119516e87f1f9c8610ca030b",
+    "mrs/gurobi_makespan.py": "a93569311ba6e0a2d2a09f6b3d7ef0d34f17d17b76e40546c02324d8fe1ba15f",
+    "mrs/gurobi_validation.py": "7d2cb52853839ebf3edfb2164925304419e1b79643fc6bb662a487ccf5294079",
+    "mrs/instances.py": "1e26f16a6f4f0526f8338229be9872d784ed4a9a5f38fbf641aaf8ef7d8dc977",
+    "mrs/lookahead.py": "7da1e24551d809cc5d9a407ee8672e43aad92e3a77bda3e0faee173b6a9f1768",
+    "mrs/method_names.py": "07e73812ef8fbdb37ffaaa957ff34bfe0579fa5eccc5647528975776d2507d3e",
+    "mrs/observations.py": "b369f074f028f08be2b31c405aeec0e06d9c9a422a0b924dac6f715a1c2cebaa",
+    "mrs/policies.py": "23900f1394517f425b7caddf79ddf14fb7d49e0fccac9b093ed851912b58edf0",
+    "mrs/protocol.py": "377ccb54d1630bee5d5922aa1711bad692fe0d07545c92e0362e2c4ec964ff82",
+    "mrs/repro.py": "6ad6e535403f2d33e300c6035c59e638c0acd519c3953da8dd7e13dcceab988e",
+    "mrs/results.py": "00364aab8992e6d7f1d18081b907ca3fc71bd90a78b170acc83106046442f5c6",
+    "mrs/scalar_execution.py": "58abc0a8fb64643d6bcad6e1d7181c4ffae8c1d15fae5fb3e0889cd399a9dad1",
+    "mrs/seed_stream.py": "dd0a8ee9d4fe18cd8fbde31d6df4f33a4a2ee0b5f67cf576edcecb7c5bad7e6f",
+    "mrs/stats.py": "b9f574df8ed17bf27083edb21f5830e9db4943dbf9b2a00759b7ade7c9ebc781",
+    "mrs/tensorized_rollout.py": "beaa52cf7ba515182cff14cc738595dc6a7ba23d90a95eb81698e7bab029bfe6",
+    "mrs/torch_core.py": "246e39be8f4080c051e8b6b4f8b137ae67ee60712d4cd224bc26ed386d8b2465",
+    "mrs/__init__.py": "d8d155f87c3a77487a54a5c043b264ef0cfc6c60fbb800a5c3f5bbd28ccc299c",
+    "nets/attention_model.py": "d302eb71f71682ad918779a5e8c014deebbd578cef5111f0419e74fb92dbb61a",
+    "nets/graph_encoder.py": "efe1d658bf0db3949fff13adde798384a1b71c318b4fb60bff6fa1080a50e48c",
+    "nets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "heuristic/ALNS.py": "728a5315ef15c2f086a5e9d5975c71f426810c729cf8c19640851f38932b3cb8",
+    "heuristic/GA.py": "d64db3ad038a0dbf36a8684c5eb3f99541c2c268710e82611a7b97b802d9c082",
+    "heuristic/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "heuristic/Util/ALNS_config.py": "adcc4c275d65b4a96c6a4efa66db32077dd5daa28f9d4bc8612ec5a51e286f6f",
+    "heuristic/Util/Config.py": "2c24e538da9215ec817d362efffd1102c6ecb78847acc4fd2bb74b84dbec0e4e",
+    "heuristic/Util/generate_init_solution.py": "efc208f4836b1ad157598273b7eae9f2bba9b783eff4021c68ce63993a8147f7",
+    "heuristic/Util/load_data.py": "70cdd82ffbca84a2c863b90899c4b962370c21207b9b14731cd34534f133d9e9",
+    "heuristic/Util/operators.py": "f41bf6776805ffdca7a40d1a1636f4485bd0ee68b843abff433bbf9b5b5828d5",
+    "heuristic/Util/Solution.py": "835a2f64eb6a8cf3738c20f4080fd9aa3b7bde56705d32d5ab4126a0ebc467fb",
+    "heuristic/Util/tensorUtil.py": "81825db9fc4aafbd8f3edae68d93f7628dc4dd94e25d204959b8d2d7b06dd3f5",
+    "heuristic/Util/util.py": "fa32e817ac9da627a02a058b5be13c619cd689c5a43642403caf73c7f5346cf7",
+    "heuristic/Util/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "utils/data_utils.py": "3e1e520c15495911c69de10ced00015a6008c2f3a89d38cd8d9cb4281653f7d9",
+    "utils/functions.py": "044e84d652eaf49218a1e6f280558cb6c8dca7697f453bd40a516a56346e0190",
+    "utils/__init__.py": "47a0aa94d9718f6424f2802f96a98b36f9fc8a01c334a337b722f7b7f71a36bd",
+    "problems/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "problems/hc/problem_hca.py": "575bab442982d7e22e3f6d3ec22264ccb8e5abe4ad3ed5f95cefa76829c4972e",
+    "problems/hc/state_hca.py": "8557114346b0ed3942db3d9f8b92467f850ab25f507754ca2c31aa845f75d3ea",
+    "problems/hc/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scripts/baselines.py": "9dbaa1a6c53674067861d306b5088b1114bdd68ce87906aabe261fccc2541ff1",
+    "scripts/evaluate.py": "99d328cc451d67f8f70d65428cddaa00ee71255d3c45ba19eafc3d1758f52b34",
+    "scripts/predict.py": "240a0786b0722332e899e5a2788b80ccd576bdea29344b037d8673ff0416f9e3",
+    "scripts/run_centralized.py": "686721aa89231493ca3a51e1ee11079759d6567764c8f3b92c325da93edaa394",
+    "scripts/train.py": "1bb9b2147999ac258957a9c3953ab6a3c89910b4954a1fa3b6f6f2c15a25985c",
+    "scripts/train_c_am_formal.py": "77eeb5c73c223fbde4436db0e6284bc8d87b627d968b87bead8845254b688467",
+    "scripts/verify_release.py": "1b6038be8d30671f99edfbf4ccb4d31155dd7e6f07c104ddd4b790be1ebe3749"
+  }
+}

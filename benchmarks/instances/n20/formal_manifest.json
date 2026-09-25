@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "role": "formal_n20_de_mrst_ablation_evaluation",
+  "cohort": "result/formal/instances/cohort.json",
+  "setting": {
+    "distribution": "uniform",
+    "task_count": 20,
+    "n_mbr": 4,
+    "n_dor": 8,
+    "speed": 1.8,
+    "mbr_speed": 1.2,
+    "dor_speed": 2.4,
+    "pickup_time_range": [15.0, 45.0],
+    "handling_time_range": [40.0, 120.0],
+    "due_time_profile": "linear_50_noise15"
+  },
+  "objective": {
+    "mode": "makespan_distance"
+  },
+  "decoding": {
+    "modes": ["greedy", "sample1280"],
+    "sample_width": 1280,
+    "sample_seed": 1103
+  }
+}
